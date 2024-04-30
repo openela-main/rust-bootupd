@@ -1,0 +1,31 @@
+From 38b971647d126f9c51545553d2a55cc77ff01d08 Mon Sep 17 00:00:00 2001
+From: Dusty Mabe <dusty@dustymabe.com>
+Date: Mon, 19 Feb 2024 14:33:17 -0500
+Subject: [PATCH] grub2: source in a console.cfg file if exists
+
+This will allow users or distro builders place console settings
+here that will get picked up on boot. This was discussed as part
+of https://github.com/coreos/fedora-coreos-tracker/issues/1671
+---
+ src/grub2/grub-static-pre.cfg | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/grub2/grub-static-pre.cfg b/src/grub2/grub-static-pre.cfg
+index 7784834..9717cfb 100644
+--- a/src/grub2/grub-static-pre.cfg
++++ b/src/grub2/grub-static-pre.cfg
+@@ -38,6 +38,11 @@ elif [ -s $prefix/grubenv ]; then
+   load_env
+ fi
+ 
++if [ -f $prefix/console.cfg ]; then
++  # Source in any GRUB console settings if provided by the user/platform
++  source $prefix/console.cfg
++fi
++
+ if [ x"${feature_menuentry_id}" = xy ]; then
+   menuentry_id_option="--id"
+ else
+-- 
+2.43.0
+

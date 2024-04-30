@@ -4,17 +4,17 @@
 %global crate bootupd
 
 Name:           rust-%{crate}
-Version:        0.2.7
-Release:        2%{?dist}
+Version:        0.2.18
+Release:        1%{?dist}
 Summary:        Bootloader updater
 
 License:        ASL 2.0
 URL:            https://crates.io/crates/bootupd
 Source0:        https://github.com/coreos/bootupd/releases/download/v%{version}/bootupd-%{version}.crate
-Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
+Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.zstd
 
-# For now, see upstream
-ExclusiveArch:  x86_64 aarch64
+Patch0: 0001-grub2-source-in-a-console.cfg-file-if-exists.patch
+
 BuildRequires: make
 BuildRequires:  openssl-devel
 %if 0%{?rhel} && !0%{?eln}
@@ -41,11 +41,11 @@ License:        ASL 2.0
 %{_bindir}/bootupctl
 %{_libexecdir}/bootupd
 %{_unitdir}/*
+%{_prefix}/lib/bootupd/grub2-static/
 
 %prep
 %autosetup -n %{crate}-%{version} -p1
-mkdir vendor
-tar -xv -C vendor -f %{SOURCE1}
+tar -xv -f %{SOURCE1}
 mkdir -p .cargo
 cat >.cargo/config << EOF
 [source.crates-io]
@@ -60,6 +60,7 @@ EOF
 
 %install
 %make_install INSTALL="install -p -c"
+make install-grub-static DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 
 %post        -n %{crate}
 %systemd_post bootupd.service bootupd.socket
@@ -71,6 +72,38 @@ EOF
 %systemd_postun bootupd.service bootupd.socket
 
 %changelog
+* Thu Feb 22 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 0.2.18-1
+- https://github.com/coreos/bootupd/releases/tag/v0.2.18
+  backport patch to support GRUB console.cfg
+  Resolves: RHEL-26439
+
+* Tue Dec 19 2023 Joseph Marrero <jmarrero@fedoraproject.org> - 0.2.17-1
+- https://github.com/coreos/bootupd/releases/tag/v0.2.17
+  Resolves: RHEL-14388
+
+* Fri Dec 15 2023 Huijing Hei <hhei@redhat.com> - 0.2.16-4
+- Sync spec with upstream
+  Related: https://issues.redhat.com/browse/RHEL-14388
+
+* Wed Dec 13 2023 Colin Walters <walters@verbum.org> - 0.2.16-3
+- Build on all architectures
+  Related: https://issues.redhat.com/browse/RHEL-14388
+
+* Wed Dec 13 2023 Colin Walters <walters@verbum.org> - 0.2.16-2
+- Update to 0.2.16
+  Related: https://issues.redhat.com/browse/RHEL-14388
+
+* Tue Nov 28 2023 Colin Walters <walters@verbum.org> - 0.2.15-2
+- https://github.com/coreos/bootupd/releases/tag/v0.2.15
+  Related: https://issues.redhat.com/browse/RHEL-14388
+
+* Fri Oct 20 2023 Colin Walters <walters@verbum.org> - 0.2.12-2
+- https://github.com/coreos/bootupd/releases/tag/v0.2.12
+
+* Tue Sep 19 2023 Colin Walters <walters@verbum.org> - 0.2.11-2
+- https://github.com/coreos/bootupd/releases/tag/v0.2.11
+  Resolves: https://issues.redhat.com/browse/RHEL-5273
+
 * Mon Aug 01 2022 Colin Walters <walters@verbum.org> - 0.2.7-2
 - https://github.com/coreos/bootupd/releases/tag/v0.2.7
 
