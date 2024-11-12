@@ -1,26 +1,24 @@
 %bcond_without check
-%global __cargo_skip_build 0
 
 %global crate bootupd
 
 Name:           rust-%{crate}
-Version:        0.2.18
+Version:        0.2.19
 Release:        1%{?dist}
 Summary:        Bootloader updater
 
-License:        ASL 2.0
-URL:            https://crates.io/crates/bootupd
-Source0:        https://github.com/coreos/bootupd/releases/download/v%{version}/bootupd-%{version}.crate
-Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.zstd
+License:        Apache-2.0
+URL:            https://github.com/coreos/bootupd
+Source0:        %{url}/releases/download/v%{version}/bootupd-%{version}.crate
+Source1:        %{url}/releases/download/v%{version}/bootupd-%{version}-vendor.tar.zstd
 
-Patch0: 0001-grub2-source-in-a-console.cfg-file-if-exists.patch
-
+# For now, see upstream
 BuildRequires: make
 BuildRequires:  openssl-devel
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel}
 BuildRequires: rust-toolset
 %else
-BuildRequires: rust-packaging
+BuildRequires:  cargo-rpm-macros >= 25
 %endif
 BuildRequires:  systemd
 
@@ -30,13 +28,23 @@ Bootloader updater}
 
 %package     -n %{crate}
 Summary:        %{summary}
-License:        ASL 2.0
+# Apache-2.0
+# Apache-2.0 OR BSL-1.0
+# Apache-2.0 OR MIT
+# Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
+# BSD-3-Clause
+# MIT
+# MIT OR Apache-2.0
+# Unlicense OR MIT
+License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 %{?systemd_requires}
 
 %description -n %{crate} %{_description}
 
 %files -n %{crate}
 %license LICENSE
+%license LICENSE.dependencies
+%license cargo-vendor.txt
 %doc README.md
 %{_bindir}/bootupctl
 %{_libexecdir}/bootupd
@@ -44,23 +52,18 @@ License:        ASL 2.0
 %{_prefix}/lib/bootupd/grub2-static/
 
 %prep
-%autosetup -n %{crate}-%{version} -p1
-tar -xv -f %{SOURCE1}
-mkdir -p .cargo
-cat >.cargo/config << EOF
-[source.crates-io]
-replace-with = "vendored-sources"
-
-[source.vendored-sources]
-directory = "vendor"
-EOF
+%autosetup -n %{crate}-%{version} -p1 -a1
+%cargo_prep -v vendor
 
 %build
 %cargo_build
+%cargo_vendor_manifest
+%cargo_license_summary
+%{cargo_license} > LICENSE.dependencies
 
 %install
 %make_install INSTALL="install -p -c"
-make install-grub-static DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
+%{__make} install-grub-static DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 
 %post        -n %{crate}
 %systemd_post bootupd.service bootupd.socket
@@ -72,6 +75,10 @@ make install-grub-static DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 %systemd_postun bootupd.service bootupd.socket
 
 %changelog
+* Fri May 17 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 0.2.19-1
+- https://github.com/coreos/bootupd/releases/tag/v0.2.19
+  Resolves: RHEL-35887
+
 * Thu Feb 22 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 0.2.18-1
 - https://github.com/coreos/bootupd/releases/tag/v0.2.18
   backport patch to support GRUB console.cfg
