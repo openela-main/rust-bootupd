@@ -4,7 +4,7 @@
 
 Name:           rust-%{crate}
 Version:        0.2.27
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Bootloader updater
 
 License:        Apache-2.0
@@ -14,6 +14,10 @@ Source1:        %{url}/releases/download/v%{version}/bootupd-%{version}-vendor.t
 %if 0%{?fedora} || 0%{?rhel} >= 10
 ExcludeArch:    %{ix86}
 %endif
+
+Patch01:        0001-ostreeutil-add-get_ostree_bootloader-and-set_ostree_.patch
+Patch02:        0002-Add-function-get_static_config_meta-to-reuse-code.patch
+Patch03:        0003-adopt-add-tag-to-install-static-GRUB-config-from-tre.patch
 
 BuildRequires: git
 # For now, see upstream
@@ -78,6 +82,10 @@ sed -i -e '/https:\/\//d' cargo-vendor.txt
 %{__make} install-systemd-unit DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 
 %changelog
+* Fri Jun 27 2025 HuijingHei <hhei@redhat.com> - 0.2.27-4
+- Backport https://github.com/coreos/bootupd/pull/945
+  Resolves: #RHEL-100702, #OCPBUGS-52485
+
 * Wed Feb 12 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 0.2.27-3
 - spec: remove ExcludeArch ix86 as this is c9s
   Resolves: #RHEL-77736, #RHEL-79091

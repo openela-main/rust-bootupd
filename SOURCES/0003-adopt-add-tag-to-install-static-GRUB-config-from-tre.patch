@@ -1,0 +1,371 @@
+From 3bcae6b37fbaa92fe9bc58ba2ea649e9610b4a92 Mon Sep 17 00:00:00 2001
+From: Huijing Hei <hhei@redhat.com>
+Date: Thu, 26 Jun 2025 21:43:02 +0800
+Subject: [PATCH 3/3] adopt: add tag to install static GRUB config from tree
+
+Add `bootupctl adopt-and-update --with-static-config` to migrate
+RHCOS system to use static GRUB config, for example 4.1/4.2 born
+RHCOS nodes.
+
+Fixes: https://issues.redhat.com/browse/OCPBUGS-52485
+(cherry picked from commit 52ff0f987501a31951931add7bb8312b8934c3b0)
+---
+ src/bios.rs          | 82 ++++++++++++++++++++++++++++++++++++++++++--
+ src/bootupd.rs       | 19 +++++++---
+ src/cli/bootupctl.rs | 15 +++++---
+ src/component.rs     |  4 +++
+ src/efi.rs           | 49 ++++++++++++++++++++++++--
+ src/grubconfigs.rs   |  5 +++
+ 6 files changed, 161 insertions(+), 13 deletions(-)
+
+diff --git a/src/bios.rs b/src/bios.rs
+index 6e528b8..0a65dcf 100644
+--- a/src/bios.rs
++++ b/src/bios.rs
+@@ -1,4 +1,6 @@
+-use anyhow::{bail, Result};
++use anyhow::{bail, Context, Result};
++use camino::Utf8PathBuf;
++use openat_ext::OpenatDirExt;
+ #[cfg(target_arch = "powerpc64")]
+ use std::borrow::Cow;
+ use std::io::prelude::*;
+@@ -8,6 +10,7 @@ use std::process::Command;
+ 
+ use crate::blockdev;
+ use crate::component::*;
++use crate::grubconfigs;
+ use crate::model::*;
+ use crate::packagesystem;
+ 
+@@ -156,7 +159,71 @@ impl Component for Bios {
+         crate::component::query_adopt_state()
+     }
+ 
+-    fn adopt_update(&self, _: &openat::Dir, update: &ContentMetadata) -> Result<InstalledContent> {
++    // Backup the current grub.cfg and replace with new static config
++    // - Backup "/boot/loader/grub.cfg" to "/boot/grub2/grub.cfg.bak"
++    // - Remove symlink "/boot/grub2/grub.cfg"
++    // - Replace "/boot/grub2/grub.cfg" symlink with new static "grub.cfg"
++    fn migrate_static_grub_config(&self, sysroot_path: &str, destdir: &openat::Dir) -> Result<()> {
++        let grub = "boot/grub2";
++        // sysroot_path is /, destdir is Dir of /
++        let grub_config_path = Utf8PathBuf::from(sysroot_path).join(grub);
++        let grub_config_dir = destdir.sub_dir(grub).context("Opening boot/grub2")?;
++
++        let grub_config = grub_config_path.join(grubconfigs::GRUBCONFIG);
++
++        if !grub_config.exists() {
++            anyhow::bail!("Could not find '{}'", grub_config);
++        }
++
++        let mut current_config;
++        // If /boot/grub2/grub.cfg is not symlink, we need to keep going
++        if !grub_config.is_symlink() {
++            println!("'{}' is not a symlink", grub_config);
++            current_config = grub_config.clone();
++        } else {
++            // If /boot/grub2/grub.cfg is symlink to /boot/loader/grub.cfg,
++            // backup it to /boot/grub2/grub.cfg.bak
++            // Get real file for symlink /boot/grub2/grub.cfg
++            let real_config = grub_config_dir.read_link(grubconfigs::GRUBCONFIG)?;
++            let real_config =
++                Utf8PathBuf::from_path_buf(real_config).expect("Path should be valid UTF-8");
++            // Resolve symlink location
++            current_config = grub_config_path.clone();
++            current_config.push(real_config);
++        }
++
++        let backup_config = grub_config_path.join(grubconfigs::GRUBCONFIG_BACKUP);
++        if !backup_config.exists() {
++            // Backup the current GRUB config which is hopefully working right now
++            println!(
++                "Creating a backup of the current GRUB config '{}' in '{}'...",
++                current_config, backup_config
++            );
++            std::fs::copy(&current_config, &backup_config)
++                .context("Failed to backup GRUB config")?;
++        }
++
++        crate::grubconfigs::install(&destdir, None, true)?;
++
++        // Remove the real config if it is symlink and will not
++        // if /boot/grub2/grub.cfg is file
++        if current_config != grub_config {
++            println!("Removing {}", current_config);
++            grub_config_dir.remove_file_optional(current_config.as_std_path())?;
++        }
++
++        // Synchronize the filesystem containing /boot/grub2 to disk.
++        let _ = grub_config_dir.syncfs();
++
++        Ok(())
++    }
++
++    fn adopt_update(
++        &self,
++        _: &openat::Dir,
++        update: &ContentMetadata,
++        with_static_config: bool,
++    ) -> Result<InstalledContent> {
+         let Some(meta) = self.query_adopt()? else {
+             anyhow::bail!("Failed to find adoptable system")
+         };
+@@ -165,6 +232,17 @@ impl Component for Bios {
+         let device = blockdev::get_single_device(&target_root)?;
+         self.run_grub_install(target_root, &device)?;
+         log::debug!("Install grub modules on {device}");
++        if with_static_config {
++            // Install the static config if the OSTree bootloader is not set.
++            if let Some(bootloader) = crate::ostreeutil::get_ostree_bootloader()? {
++                println!(
++                    "ostree repo 'sysroot.bootloader' config option is currently set to: '{bootloader}'",
++                );
++            } else {
++                println!("ostree repo 'sysroot.bootloader' config option is not set yet");
++                self.migrate_static_grub_config(target_root, &openat::Dir::open(target_root)?)?;
++            };
++        }
+         Ok(InstalledContent {
+             meta: update.clone(),
+             filetree: None,
+diff --git a/src/bootupd.rs b/src/bootupd.rs
+index 1213654..0e0a00e 100644
+--- a/src/bootupd.rs
++++ b/src/bootupd.rs
+@@ -256,7 +256,7 @@ pub(crate) fn update(name: &str) -> Result<ComponentUpdateResult> {
+ }
+ 
+ /// daemon implementation of component adoption
+-pub(crate) fn adopt_and_update(name: &str) -> Result<ContentMetadata> {
++pub(crate) fn adopt_and_update(name: &str, with_static_config: bool) -> Result<ContentMetadata> {
+     let sysroot = openat::Dir::open("/")?;
+     let mut state = SavedState::load_from_disk("/")?.unwrap_or_default();
+     let component = component::new_from_name(name)?;
+@@ -273,10 +273,19 @@ pub(crate) fn adopt_and_update(name: &str) -> Result<ContentMetadata> {
+         SavedState::acquire_write_lock(sysroot).context("Failed to acquire write lock")?;
+ 
+     let inst = component
+-        .adopt_update(&state_guard.sysroot, &update)
++        .adopt_update(&state_guard.sysroot, &update, with_static_config)
+         .context("Failed adopt and update")?;
+     state.installed.insert(component.name().into(), inst);
+ 
++    // Set static_configs metadata and save
++    if with_static_config && state.static_configs.is_none() {
++        let meta = get_static_config_meta()?;
++        state.static_configs = Some(meta);
++        // Set bootloader to none
++        crate::ostreeutil::set_ostree_bootloader("none")?;
++
++        println!("Static GRUB configuration has been adopted successfully.");
++    }
+     state_guard.update_state(&state)?;
+     Ok(update)
+ }
+@@ -445,7 +454,7 @@ pub(crate) fn client_run_update() -> Result<()> {
+     }
+     for (name, adoptable) in status.adoptable.iter() {
+         if adoptable.confident {
+-            let r: ContentMetadata = adopt_and_update(name)?;
++            let r: ContentMetadata = adopt_and_update(name, false)?;
+             println!("Adopted and updated: {}: {}", name, r.version);
+             updated = true;
+         } else {
+@@ -458,13 +467,13 @@ pub(crate) fn client_run_update() -> Result<()> {
+     Ok(())
+ }
+ 
+-pub(crate) fn client_run_adopt_and_update() -> Result<()> {
++pub(crate) fn client_run_adopt_and_update(with_static_config: bool) -> Result<()> {
+     let status: Status = status()?;
+     if status.adoptable.is_empty() {
+         println!("No components are adoptable.");
+     } else {
+         for (name, _) in status.adoptable.iter() {
+-            let r: ContentMetadata = adopt_and_update(name)?;
++            let r: ContentMetadata = adopt_and_update(name, with_static_config)?;
+             println!("Adopted and updated: {}: {}", name, r.version);
+         }
+     }
+diff --git a/src/cli/bootupctl.rs b/src/cli/bootupctl.rs
+index 0b79054..4e831fe 100644
+--- a/src/cli/bootupctl.rs
++++ b/src/cli/bootupctl.rs
+@@ -56,7 +56,7 @@ pub enum CtlVerb {
+     #[clap(name = "update", about = "Update all components")]
+     Update,
+     #[clap(name = "adopt-and-update", about = "Update all adoptable components")]
+-    AdoptAndUpdate,
++    AdoptAndUpdate(AdoptAndUpdateOpts),
+     #[clap(name = "validate", about = "Validate system state")]
+     Validate,
+     #[clap(
+@@ -88,13 +88,20 @@ pub struct StatusOpts {
+     json: bool,
+ }
+ 
++#[derive(Debug, Parser)]
++pub struct AdoptAndUpdateOpts {
++    /// Install the static GRUB config files
++    #[clap(long, action)]
++    with_static_config: bool,
++}
++
+ impl CtlCommand {
+     /// Run CLI application.
+     pub fn run(self) -> Result<()> {
+         match self.cmd {
+             CtlVerb::Status(opts) => Self::run_status(opts),
+             CtlVerb::Update => Self::run_update(),
+-            CtlVerb::AdoptAndUpdate => Self::run_adopt_and_update(),
++            CtlVerb::AdoptAndUpdate(opts) => Self::run_adopt_and_update(opts),
+             CtlVerb::Validate => Self::run_validate(),
+             CtlVerb::Backend(CtlBackend::Generate(opts)) => {
+                 super::bootupd::DCommand::run_generate_meta(opts)
+@@ -133,9 +140,9 @@ impl CtlCommand {
+     }
+ 
+     /// Runner for `update` verb.
+-    fn run_adopt_and_update() -> Result<()> {
++    fn run_adopt_and_update(opts: AdoptAndUpdateOpts) -> Result<()> {
+         ensure_running_in_systemd()?;
+-        bootupd::client_run_adopt_and_update()
++        bootupd::client_run_adopt_and_update(opts.with_static_config)
+     }
+ 
+     /// Runner for `validate` verb.
+diff --git a/src/component.rs b/src/component.rs
+index dfff20d..cb3b355 100644
+--- a/src/component.rs
++++ b/src/component.rs
+@@ -31,11 +31,15 @@ pub(crate) trait Component {
+     /// and "synthesize" content metadata from it.
+     fn query_adopt(&self) -> Result<Option<Adoptable>>;
+ 
++    // Backup the current grub config, and install static grub config from tree
++    fn migrate_static_grub_config(&self, sysroot_path: &str, destdir: &openat::Dir) -> Result<()>;
++
+     /// Given an adoptable system and an update, perform the update.
+     fn adopt_update(
+         &self,
+         sysroot: &openat::Dir,
+         update: &ContentMetadata,
++        with_static_config: bool,
+     ) -> Result<InstalledContent>;
+ 
+     /// Implementation of `bootupd install` for a given component.  This should
+diff --git a/src/efi.rs b/src/efi.rs
+index f7a0daa..bd94868 100644
+--- a/src/efi.rs
++++ b/src/efi.rs
+@@ -20,9 +20,10 @@ use walkdir::WalkDir;
+ use widestring::U16CString;
+ 
+ use crate::filetree;
++use crate::grubconfigs;
+ use crate::model::*;
+ use crate::ostreeutil;
+-use crate::util::{self, CommandRunExt};
++use crate::util::*;
+ use crate::{component::*, packagesystem};
+ 
+ /// Well-known paths to the ESP that may have been mounted external to us.
+@@ -108,7 +109,7 @@ impl Efi {
+             if st.f_type != libc::MSDOS_SUPER_MAGIC {
+                 continue;
+             }
+-            util::ensure_writable_mount(&mnt)?;
++            ensure_writable_mount(&mnt)?;
+             log::debug!("Reusing existing {mnt:?}");
+             return Ok(mnt);
+         }
+@@ -257,11 +258,41 @@ impl Component for Efi {
+         crate::component::query_adopt_state()
+     }
+ 
++    // Backup "/boot/efi/EFI/{vendor}/grub.cfg" to "/boot/efi/EFI/{vendor}/grub.cfg.bak"
++    // Replace "/boot/efi/EFI/{vendor}/grub.cfg" with new static "grub.cfg"
++    fn migrate_static_grub_config(&self, sysroot_path: &str, destdir: &openat::Dir) -> Result<()> {
++        let sysroot =
++            openat::Dir::open(sysroot_path).with_context(|| format!("Opening {sysroot_path}"))?;
++        let Some(vendor) = self.get_efi_vendor(&sysroot)? else {
++            anyhow::bail!("Failed to find efi vendor");
++        };
++
++        // destdir is /boot/efi/EFI
++        let efidir = destdir
++            .sub_dir(&vendor)
++            .with_context(|| format!("Opening EFI/{}", vendor))?;
++
++        if !efidir.exists(grubconfigs::GRUBCONFIG_BACKUP)? {
++            println!("Creating a backup of the current GRUB config on EFI");
++            efidir
++                .copy_file(grubconfigs::GRUBCONFIG, grubconfigs::GRUBCONFIG_BACKUP)
++                .context("Failed to backup GRUB config")?;
++        }
++
++        grubconfigs::install(&sysroot, Some(&vendor), true)?;
++        // Synchronize the filesystem containing /boot/efi/EFI/{vendor} to disk.
++        // (ignore failures)
++        let _ = efidir.syncfs();
++
++        Ok(())
++    }
++
+     /// Given an adoptable system and an update, perform the update.
+     fn adopt_update(
+         &self,
+         sysroot: &openat::Dir,
+         updatemeta: &ContentMetadata,
++        with_static_config: bool,
+     ) -> Result<InstalledContent> {
+         let Some(meta) = self.query_adopt()? else {
+             anyhow::bail!("Failed to find adoptable system")
+@@ -277,6 +308,20 @@ impl Component for Efi {
+         let diff = updatef.relative_diff_to(&esp)?;
+         log::trace!("applying adoption diff: {}", &diff);
+         filetree::apply_diff(&updated, &esp, &diff, None).context("applying filesystem changes")?;
++
++        // Backup current config and install static config
++        if with_static_config {
++            // Install the static config if the OSTree bootloader is not set.
++            if let Some(bootloader) = crate::ostreeutil::get_ostree_bootloader()? {
++                println!(
++                    "ostree repo 'sysroot.bootloader' config option is currently set to: '{bootloader}'",
++                );
++            } else {
++                println!("ostree repo 'sysroot.bootloader' config option is not set yet");
++                self.migrate_static_grub_config("/", &esp)?;
++            };
++        }
++
+         Ok(InstalledContent {
+             meta: updatemeta.clone(),
+             filetree: Some(updatef),
+diff --git a/src/grubconfigs.rs b/src/grubconfigs.rs
+index 09aeebf..f3c70d6 100644
+--- a/src/grubconfigs.rs
++++ b/src/grubconfigs.rs
+@@ -9,6 +9,9 @@ use openat_ext::OpenatDirExt;
+ const GRUB2DIR: &str = "grub2";
+ const CONFIGDIR: &str = "/usr/lib/bootupd/grub2-static";
+ const DROPINDIR: &str = "configs.d";
++// The related grub files
++pub(crate) const GRUBCONFIG: &str = "grub.cfg";
++pub(crate) const GRUBCONFIG_BACKUP: &str = "grub.cfg.backup";
+ 
+ /// Install the static GRUB config files.
+ #[context("Installing static GRUB configs")]
+@@ -100,6 +103,8 @@ pub(crate) fn install(
+                     .copy_file_at(uuid_path, &efidir, target)
+                     .context("Writing bootuuid.cfg to efi dir")?;
+             }
++        } else {
++            println!("Could not find /boot/efi/EFI when installing {target:?}");
+         }
+     }
+ 
+-- 
+2.49.0
+
