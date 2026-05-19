@@ -1,0 +1,3015 @@
+diff -ruN bootupd-0.2.32.orig/Cargo.lock bootupd-0.2.32/Cargo.lock
+--- bootupd-0.2.32.orig/Cargo.lock	1969-12-31 19:00:01.000000000 -0500
++++ bootupd-0.2.32/Cargo.lock	2026-04-15 23:25:50.683315578 -0400
+@@ -3,25 +3,10 @@
+ version = 4
+ 
+ [[package]]
+-name = "addr2line"
+-version = "0.24.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dfbe277e56a376000877090da837660b4427aad530e3028d44e0bffe4f89a1c1"
+-dependencies = [
+- "gimli",
+-]
+-
+-[[package]]
+-name = "adler2"
+-version = "2.0.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "512761e0bb2578dd7380c6baaa0f4ce03e84f95e960231d1dec8bf4d7d6e2627"
+-
+-[[package]]
+ name = "aho-corasick"
+-version = "1.1.3"
++version = "1.1.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8e60d3430d3a69478ad0993f19238d2df97c507009a52b3c10addcd7f6bcb916"
++checksum = "ddd31a130427c27518df266943a5308ed92d4b226cc639f5a8f1002816174301"
+ dependencies = [
+  "memchr",
+ ]
+@@ -43,9 +28,9 @@
+ 
+ [[package]]
+ name = "anstream"
+-version = "0.6.18"
++version = "0.6.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8acc5369981196006228e28809f761875c0327210a891e941f4c683b3a99529b"
++checksum = "43d5b281e737544384e969a5ccad3f1cdd24b48086a0fc1b2a5262a26b8f4f4a"
+ dependencies = [
+  "anstyle",
+  "anstyle-parse",
+@@ -58,85 +43,50 @@
+ 
+ [[package]]
+ name = "anstyle"
+-version = "1.0.10"
++version = "1.0.14"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "55cc3b69f167a1ef2e161439aa98aed94e6028e5f9a59be9a6ffb47aef1651f9"
++checksum = "940b3a0ca603d1eade50a4846a2afffd5ef57a9feac2c0e2ec2e14f9ead76000"
+ 
+ [[package]]
+ name = "anstyle-parse"
+-version = "0.2.6"
++version = "0.2.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3b2d16507662817a6a20a9ea92df6652ee4f94f914589377d69f3b21bc5798a9"
++checksum = "4e7644824f0aa2c7b9384579234ef10eb7efb6a0deb83f9630a49594dd9c15c2"
+ dependencies = [
+  "utf8parse",
+ ]
+ 
+ [[package]]
+ name = "anstyle-query"
+-version = "1.1.2"
++version = "1.1.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "79947af37f4177cfead1110013d678905c37501914fba0efea834c3fe9a8d60c"
++checksum = "40c48f72fd53cd289104fc64099abca73db4166ad86ea0b4341abe65af83dadc"
+ dependencies = [
+- "windows-sys 0.59.0",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+ name = "anstyle-wincon"
+-version = "3.0.7"
++version = "3.0.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ca3534e77181a9cc07539ad51f2141fe32f6c3ffd4df76db8ad92346b003ae4e"
++checksum = "291e6a250ff86cd4a820112fb8898808a366d8f9f58ce16d1f538353ad55747d"
+ dependencies = [
+  "anstyle",
+- "once_cell",
+- "windows-sys 0.59.0",
++ "once_cell_polyfill",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+ name = "anyhow"
+-version = "1.0.100"
++version = "1.0.102"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a23eb6b1614318a8071c9b2521f36b424b2c83db5eb3a0fead4a6c0809af6e61"
++checksum = "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
+ 
+ [[package]]
+ name = "autocfg"
+-version = "1.4.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
+-
+-[[package]]
+-name = "backtrace"
+-version = "0.3.74"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8d82cb332cdfaed17ae235a638438ac4d4839913cc2af585c3c6746e8f8bee1a"
+-dependencies = [
+- "addr2line",
+- "cfg-if",
+- "libc",
+- "miniz_oxide",
+- "object",
+- "rustc-demangle",
+- "windows-targets",
+-]
+-
+-[[package]]
+-name = "bincode"
+-version = "2.0.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "36eaf5d7b090263e8150820482d5d93cd964a81e4019913c972f4edcc6edb740"
+-dependencies = [
+- "bincode_derive",
+- "serde",
+- "unty",
+-]
+-
+-[[package]]
+-name = "bincode_derive"
+-version = "2.0.1"
++version = "1.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bf95709a440f45e986983918d0e8a1f30a9b1df04918fc828670606804ac3c09"
+-dependencies = [
+- "virtue",
+-]
++checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
+ 
+ [[package]]
+ name = "bitflags"
+@@ -146,9 +96,9 @@
+ 
+ [[package]]
+ name = "bitflags"
+-version = "2.8.0"
++version = "2.11.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8f68f53c83ab957f72c32642f3868eec03eb974d1fb82e453128456482613d36"
++checksum = "843867be96c8daad0d758b57df9392b6d8d271134fce549de6ce169ff98a92af"
+ 
+ [[package]]
+ name = "block-buffer"
+@@ -161,35 +111,61 @@
+ 
+ [[package]]
+ name = "bootc-internal-blockdev"
+-version = "0.0.0"
++version = "0.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "12bb9c7f9e3f9ce605ae80d95f53a4957cacd95d8f022d9f7745bcdf1b9a94c4"
++checksum = "54393bf69cc17ef659609f3b1143beed0f7529c79ef045a876621a2f946a0051"
+ dependencies = [
+  "anyhow",
++ "bootc-internal-mount",
+  "bootc-internal-utils",
+  "camino",
++ "cap-std-ext",
+  "fn-error-context",
+- "regex",
++ "libc",
++ "rustix",
+  "serde",
+  "serde_json",
++ "tempfile",
++ "tokio",
++ "tracing",
++]
++
++[[package]]
++name = "bootc-internal-mount"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2112a3bed0dd0ce551b7505fae6e7b57609952c666c3345d85ac289f3b396276"
++dependencies = [
++ "anyhow",
++ "bootc-internal-utils",
++ "camino",
++ "cap-std-ext",
++ "fn-error-context",
++ "libc",
++ "rustix",
++ "serde",
++ "tempfile",
+  "tracing",
+ ]
+ 
+ [[package]]
+ name = "bootc-internal-utils"
+-version = "0.0.0"
++version = "0.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7576a42b06b4d1d4005aac27f93b848bda3d80b6c80a6f1aa0f494b957351b81"
++checksum = "a3292185c166091432ecbc6b203c0c73953d6b5965908368c51df800f1c549ed"
+ dependencies = [
++ "anstream",
+  "anyhow",
+  "chrono",
+- "rustix 1.1.2",
++ "owo-colors",
++ "rustix",
+  "serde",
+  "serde_json",
+  "shlex",
+  "tempfile",
+  "tokio",
+  "tracing",
++ "tracing-journald",
+  "tracing-subscriber",
+ ]
+ 
+@@ -198,7 +174,6 @@
+ version = "0.2.32"
+ dependencies = [
+  "anyhow",
+- "bincode",
+  "bootc-internal-blockdev",
+  "bootc-internal-utils",
+  "camino",
+@@ -219,7 +194,7 @@
+  "os-release",
+  "regex",
+  "rpm",
+- "rustix 1.1.2",
++ "rustix",
+  "serde",
+  "serde_json",
+  "signal-hook-registry",
+@@ -231,98 +206,98 @@
+ 
+ [[package]]
+ name = "bumpalo"
+-version = "3.17.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1628fb46dfa0b37568d12e5edd512553eccf6a22a78e8bde00bb4aed84d5bdbf"
+-
+-[[package]]
+-name = "byteorder"
+-version = "1.5.0"
++version = "3.20.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
++checksum = "5d20789868f4b01b2f2caec9f5c4e0213b41e3e5702a50157d699ae31ced2fcb"
+ 
+ [[package]]
+ name = "bytes"
+-version = "1.10.0"
++version = "1.11.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f61dac84819c6588b558454b194026eb1f09c293b9036ae9b159e74e73ab6cf9"
++checksum = "1e748733b7cbc798e1434b6ac524f0c1ff2ab456fe201501e6497c8417a4fc33"
+ 
+ [[package]]
+ name = "camino"
+-version = "1.2.1"
++version = "1.2.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "276a59bf2b2c967788139340c9f0c5b12d7fd6630315c15c217e559de85d2609"
++checksum = "e629a66d692cb9ff1a1c664e41771b3dcaf961985a9774c0eb0bd1b51cf60a48"
+ dependencies = [
+  "serde_core",
+ ]
+ 
+ [[package]]
+ name = "cap-primitives"
+-version = "3.4.2"
++version = "4.0.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8fc15faeed2223d8b8e8cc1857f5861935a06d06713c4ac106b722ae9ce3c369"
++checksum = "cdadbd7c002d3a484b35243669abdae85a0ebaded5a61117169dc3400f9a7ff0"
+ dependencies = [
+  "ambient-authority",
+  "fs-set-times",
+  "io-extras",
+- "io-lifetimes",
++ "io-lifetimes 3.0.1",
+  "ipnet",
+  "maybe-owned",
+- "rustix 0.38.44",
+- "windows-sys 0.59.0",
++ "rustix",
++ "rustix-linux-procfs",
++ "windows-sys 0.61.2",
+  "winx",
+ ]
+ 
+ [[package]]
+ name = "cap-std"
+-version = "3.4.2"
++version = "4.0.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c3dbd3e8e8d093d6ccb4b512264869e1281cdb032f7940bd50b2894f96f25609"
++checksum = "7281235d6e96d3544ca18bba9049be92f4190f8d923e3caef1b5f66cfa752608"
+ dependencies = [
++ "camino",
+  "cap-primitives",
+  "io-extras",
+- "io-lifetimes",
+- "rustix 0.38.44",
++ "io-lifetimes 3.0.1",
++ "rustix",
+ ]
+ 
+ [[package]]
+ name = "cap-std-ext"
+-version = "4.0.6"
++version = "5.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7770022cf9ca0e804cdc7725fa6be84a3721e5733ba889b3300689dcdb407fa1"
++checksum = "56f9d7cf114dea582f663f03f4c563d0fc5ca2c8fa4c496eb538d8f01981ea51"
+ dependencies = [
+  "cap-primitives",
+  "cap-tempfile",
+  "libc",
+- "rustix 1.1.2",
++ "rustix",
+ ]
+ 
+ [[package]]
+ name = "cap-tempfile"
+-version = "3.4.2"
++version = "4.0.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1ffa1c0edc4958d742bab2e903e52f93ccee482072680e08d6ce0784873e65b1"
++checksum = "42f22d5c0b1147e8bd9105fa004450f673c139d7e632f7edc3980f94a51f20f3"
+ dependencies = [
++ "camino",
+  "cap-std",
+- "rand",
+- "rustix 0.38.44",
++ "rand 0.9.2",
++ "rustix",
++ "rustix-linux-procfs",
+  "uuid",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+ name = "cc"
+-version = "1.2.13"
++version = "1.2.57"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c7777341816418c02e033934a09f20dc0ccaf65a5201ef8a450ae0105a573fda"
++checksum = "7a0dd1ca384932ff3641c8718a02769f1698e7563dc6974ffd03346116310423"
+ dependencies = [
++ "find-msvc-tools",
+  "shlex",
+ ]
+ 
+ [[package]]
+ name = "cfg-if"
+-version = "1.0.0"
++version = "1.0.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
++checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
+ 
+ [[package]]
+ name = "cfg_aliases"
+@@ -332,9 +307,9 @@
+ 
+ [[package]]
+ name = "chrono"
+-version = "0.4.42"
++version = "0.4.44"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "145052bdd345b87320e369255277e3fb5152762ad123a901ef5c262dd38fe8d2"
++checksum = "c673075a2e0e5f4a1dde27ce9dee1ea4558c7ffe648f576438a20ca1d2acc4b0"
+ dependencies = [
+  "iana-time-zone",
+  "js-sys",
+@@ -346,9 +321,9 @@
+ 
+ [[package]]
+ name = "clap"
+-version = "4.5.51"
++version = "4.6.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4c26d721170e0295f191a69bd9a1f93efcdb0aff38684b61ab5750468972e5f5"
++checksum = "b193af5b67834b676abd72466a96c1024e6a6ad978a1f484bd90b85c94041351"
+ dependencies = [
+  "clap_builder",
+  "clap_derive",
+@@ -356,9 +331,9 @@
+ 
+ [[package]]
+ name = "clap_builder"
+-version = "4.5.51"
++version = "4.6.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "75835f0c7bf681bfd05abe44e965760fea999a5286c6eb2d59883634fd02011a"
++checksum = "714a53001bf66416adb0e2ef5ac857140e7dc3a0c48fb28b2f10762fc4b5069f"
+ dependencies = [
+  "anstyle",
+  "clap_lex",
+@@ -367,27 +342,27 @@
+ 
+ [[package]]
+ name = "clap_derive"
+-version = "4.5.49"
++version = "4.6.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2a0b5487afeab2deb2ff4e03a807ad1a03ac532ff5a2cee5d86884440c7f7671"
++checksum = "1110bd8a634a1ab8cb04345d8d878267d57c3cf1b38d91b71af6686408bbca6a"
+ dependencies = [
+  "heck",
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "clap_lex"
+-version = "0.7.4"
++version = "1.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
++checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
+ 
+ [[package]]
+ name = "colorchoice"
+-version = "1.0.3"
++version = "1.0.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
++checksum = "1d07550c9036bf2ae0c684c4297d503f838287c83c53686d05370d0e139ae570"
+ 
+ [[package]]
+ name = "core-foundation-sys"
+@@ -412,9 +387,9 @@
+ 
+ [[package]]
+ name = "crypto-common"
+-version = "0.1.6"
++version = "0.1.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1bfb12502f3fc46cca1bb51ac28df9d618d813cdc3d2f25b9fe775a34af26bb3"
++checksum = "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a"
+ dependencies = [
+  "generic-array",
+  "typenum",
+@@ -456,14 +431,14 @@
+ dependencies = [
+  "num-traits",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "env_filter"
+-version = "0.1.3"
++version = "1.0.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "186e05a59d4c50738528153b83b0b0194d3a29507dfec16eccd4b342903397d0"
++checksum = "7a1c3cc8e57274ec99de65301228b537f1e4eedc1b8e0f9411c6caac8ae7308f"
+ dependencies = [
+  "log",
+  "regex",
+@@ -471,9 +446,9 @@
+ 
+ [[package]]
+ name = "env_logger"
+-version = "0.11.8"
++version = "0.11.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "13c863f0904021b108aa8b2f55046443e6b1ebde8fd4a15c399893aae4fa069f"
++checksum = "b2daee4ea451f429a58296525ddf28b45a3b64f1acf6587e2067437bb11e218d"
+ dependencies = [
+  "anstream",
+  "anstyle",
+@@ -483,13 +458,19 @@
+ ]
+ 
+ [[package]]
++name = "equivalent"
++version = "1.0.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
++
++[[package]]
+ name = "errno"
+-version = "0.3.10"
++version = "0.3.14"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
++checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+ dependencies = [
+  "libc",
+- "windows-sys 0.59.0",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+@@ -500,7 +481,7 @@
+ dependencies = [
+  "log",
+  "once_cell",
+- "rand",
++ "rand 0.8.5",
+ ]
+ 
+ [[package]]
+@@ -510,6 +491,12 @@
+ checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
+ 
+ [[package]]
++name = "find-msvc-tools"
++version = "0.1.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
++
++[[package]]
+ name = "fn-error-context"
+ version = "0.2.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -517,10 +504,16 @@
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
++name = "foldhash"
++version = "0.1.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
++
++[[package]]
+ name = "foreign-types"
+ version = "0.3.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -537,12 +530,12 @@
+ 
+ [[package]]
+ name = "fs-set-times"
+-version = "0.20.2"
++version = "0.20.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5e2e6123af26f0f2c51cc66869137080199406754903cc926a7690401ce09cb4"
++checksum = "94e7099f6313ecacbe1256e8ff9d617b75d1bcb16a6fddef94866d225a01a14a"
+ dependencies = [
+- "io-lifetimes",
+- "rustix 0.38.44",
++ "io-lifetimes 2.0.4",
++ "rustix",
+  "windows-sys 0.59.0",
+ ]
+ 
+@@ -568,32 +561,54 @@
+ 
+ [[package]]
+ name = "getrandom"
+-version = "0.2.15"
++version = "0.2.17"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c4567c8db10ae91089c99af84c68c38da3ec2f087c3f82960bcdbf3656b6f4d7"
++checksum = "ff2abc00be7fca6ebc474524697ae276ad847ad0a6b3faa4bcb027e9a4614ad0"
+ dependencies = [
+  "cfg-if",
+  "libc",
+- "wasi 0.11.0+wasi-snapshot-preview1",
++ "wasi",
+ ]
+ 
+ [[package]]
+ name = "getrandom"
+-version = "0.3.1"
++version = "0.3.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "899def5c37c4fd7b2664648c28120ecec138e4d395b459e5ca34f9cce2dd77fd"
++dependencies = [
++ "cfg-if",
++ "libc",
++ "r-efi 5.3.0",
++ "wasip2",
++]
++
++[[package]]
++name = "getrandom"
++version = "0.4.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "43a49c392881ce6d5c3b8cb70f98717b7c07aabbdff06687b9030dbfbe2725f8"
++checksum = "0de51e6874e94e7bf76d726fc5d13ba782deca734ff60d5bb2fb2607c7406555"
+ dependencies = [
+  "cfg-if",
+  "libc",
+- "wasi 0.13.3+wasi-0.2.2",
+- "windows-targets",
++ "r-efi 6.0.0",
++ "wasip2",
++ "wasip3",
+ ]
+ 
+ [[package]]
+-name = "gimli"
+-version = "0.31.1"
++name = "hashbrown"
++version = "0.15.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
++checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
++dependencies = [
++ "foldhash",
++]
++
++[[package]]
++name = "hashbrown"
++version = "0.16.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100"
+ 
+ [[package]]
+ name = "heck"
+@@ -618,14 +633,15 @@
+ 
+ [[package]]
+ name = "iana-time-zone"
+-version = "0.1.61"
++version = "0.1.65"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "235e081f3925a06703c2d0117ea8b91f042756fd6e7a6e5d901e8ca1a996b220"
++checksum = "e31bc9ad994ba00e440a8aa5c9ef0ec67d5cb5e5cb0cc7f8b744a35b389cc470"
+ dependencies = [
+  "android_system_properties",
+  "core-foundation-sys",
+  "iana-time-zone-haiku",
+  "js-sys",
++ "log",
+  "wasm-bindgen",
+  "windows-core",
+ ]
+@@ -640,13 +656,31 @@
+ ]
+ 
+ [[package]]
++name = "id-arena"
++version = "2.3.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3d3067d79b975e8844ca9eb072e16b31c3c1c36928edf9c6789548c524d0d954"
++
++[[package]]
++name = "indexmap"
++version = "2.13.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7714e70437a7dc3ac8eb7e6f8df75fd8eb422675fc7678aff7364301092b1017"
++dependencies = [
++ "equivalent",
++ "hashbrown 0.16.1",
++ "serde",
++ "serde_core",
++]
++
++[[package]]
+ name = "io-extras"
+-version = "0.18.4"
++version = "0.19.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2285ddfe3054097ef4b2fe909ef8c3bcd1ea52a8f0d274416caebeef39f04a65"
++checksum = "20fd6de4ccfcc187e38bc21cfa543cb5a302cb86a8b114eb7f0bf0dc9f8ac00f"
+ dependencies = [
+- "io-lifetimes",
+- "windows-sys 0.59.0",
++ "io-lifetimes 3.0.1",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -656,16 +690,22 @@
+ checksum = "06432fb54d3be7964ecd3649233cddf80db2832f47fec34c01f65b3d9d774983"
+ 
+ [[package]]
++name = "io-lifetimes"
++version = "3.0.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2f0fb0570afe1fed943c5c3d4102d5358592d8625fda6a0007fdbe65a92fba96"
++
++[[package]]
+ name = "ipnet"
+-version = "2.11.0"
++version = "2.12.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "469fb0b9cefa57e3ef31275ee7cacb78f2fdca44e4765491884a2b119d4eb130"
++checksum = "d98f6fed1fde3f8c21bc40a1abb88dd75e67924f9cffc3ef95607bad8017f8e2"
+ 
+ [[package]]
+ name = "is_terminal_polyfill"
+-version = "1.70.1"
++version = "1.70.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7943c866cc5cd64cbc25b2e01621d07fa8eb2a1a23160ee81ce38704e97b8ecf"
++checksum = "a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695"
+ 
+ [[package]]
+ name = "itertools"
+@@ -678,39 +718,39 @@
+ 
+ [[package]]
+ name = "itoa"
+-version = "1.0.14"
++version = "1.0.17"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d75a2a4b1b190afb6f5425f10f6a8f959d2ea0b9c2b1d79553551850539e4674"
++checksum = "92ecc6618181def0457392ccd0ee51198e065e016d1d527a7ac1b6dc7c1f09d2"
+ 
+ [[package]]
+ name = "jiff"
+-version = "0.2.4"
++version = "0.2.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d699bc6dfc879fb1bf9bdff0d4c56f0884fc6f0d0eb0fba397a6d00cd9a6b85e"
++checksum = "1a3546dc96b6d42c5f24902af9e2538e82e39ad350b0c766eb3fbf2d8f3d8359"
+ dependencies = [
+  "jiff-static",
+  "log",
+  "portable-atomic",
+  "portable-atomic-util",
+- "serde",
++ "serde_core",
+ ]
+ 
+ [[package]]
+ name = "jiff-static"
+-version = "0.2.4"
++version = "0.2.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8d16e75759ee0aa64c57a56acbf43916987b20c77373cb7e808979e02b93c9f9"
++checksum = "2a8c8b344124222efd714b73bb41f8b5120b27a7cc1c75593a6ff768d9d05aa4"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "js-sys"
+-version = "0.3.77"
++version = "0.3.91"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1cfaf33c695fc6e08064efbc1f72ec937429614f25eef83af942d0e227c3a28f"
++checksum = "b49715b7073f385ba4bc528e5747d02e66cb39c6146efb66b781f131f0fb399c"
+ dependencies = [
+  "once_cell",
+  "wasm-bindgen",
+@@ -723,10 +763,16 @@
+ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
+ 
+ [[package]]
++name = "leb128fmt"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "09edd9e8b54e49e587e4f6295a7d29c3ea94d469cb40ab8ca70b288248a81db2"
++
++[[package]]
+ name = "libc"
+-version = "0.2.177"
++version = "0.2.183"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2874a2af47a2325c2001a6e6fad9b16a53b802102b528163885171cf92b15976"
++checksum = "b5b646652bf6661599e1da8901b3b9522896f01e736bad5f723fe7a3a27f899d"
+ 
+ [[package]]
+ name = "libsystemd"
+@@ -748,29 +794,23 @@
+ 
+ [[package]]
+ name = "linux-raw-sys"
+-version = "0.4.15"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d26c52dbd32dccf2d10cac7725f8eae5296885fb5703b261f7d0a0739ec807ab"
+-
+-[[package]]
+-name = "linux-raw-sys"
+-version = "0.11.0"
++version = "0.12.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "df1d3c3b53da64cf5760482273a98e575c651a67eec7f77df96b5b642de8f039"
++checksum = "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53"
+ 
+ [[package]]
+ name = "log"
+-version = "0.4.28"
++version = "0.4.29"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "34080505efa8e45a4b816c349525ebe327ceaa8559756f0356cba97ef3bf7432"
++checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
+ 
+ [[package]]
+ name = "matchers"
+-version = "0.1.0"
++version = "0.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8263075bb86c5a1b1427b5ae862e8889656f126e9f77c484496e8b47cf5c5558"
++checksum = "d1525a2a28c7f4fa0fc98bb91ae755d1e2d1505079e05539e35bc876b5d65ae9"
+ dependencies = [
+- "regex-automata 0.1.10",
++ "regex-automata",
+ ]
+ 
+ [[package]]
+@@ -791,9 +831,9 @@
+ 
+ [[package]]
+ name = "memchr"
+-version = "2.7.4"
++version = "2.8.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
++checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
+ 
+ [[package]]
+ name = "memoffset"
+@@ -820,23 +860,14 @@
+ checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
+ 
+ [[package]]
+-name = "miniz_oxide"
+-version = "0.8.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b3b1c9bd4fe1f0f8b387f6eb9eb3b4a1aa26185e5750efb9140301703f62cd1b"
+-dependencies = [
+- "adler2",
+-]
+-
+-[[package]]
+ name = "mio"
+-version = "1.0.3"
++version = "1.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2886843bf800fba2e3377cff24abf6379b4c4d5c6681eaf9ea5b0d15090450bd"
++checksum = "a69bcab0ad47271a0234d9422b131806bf3968021e5dc9328caf2d4cd58557fc"
+ dependencies = [
+  "libc",
+- "wasi 0.11.0+wasi-snapshot-preview1",
+- "windows-sys 0.52.0",
++ "wasi",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+@@ -858,7 +889,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "71e2746dc3a24dd78b3cfcb7be93368c6de9963d30f43a6a73998a9cf4b17b46"
+ dependencies = [
+- "bitflags 2.8.0",
++ "bitflags 2.11.0",
+  "cfg-if",
+  "cfg_aliases",
+  "libc",
+@@ -886,12 +917,11 @@
+ 
+ [[package]]
+ name = "nu-ansi-term"
+-version = "0.46.0"
++version = "0.50.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
++checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
+ dependencies = [
+- "overload",
+- "winapi",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+@@ -935,7 +965,7 @@
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+@@ -979,19 +1009,16 @@
+ ]
+ 
+ [[package]]
+-name = "object"
+-version = "0.36.7"
++name = "once_cell"
++version = "1.21.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "62948e14d923ea95ea2c7c86c71013138b66525b86bdc08d2dcc262bdb497b87"
+-dependencies = [
+- "memchr",
+-]
++checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
+ 
+ [[package]]
+-name = "once_cell"
+-version = "1.20.3"
++name = "once_cell_polyfill"
++version = "1.70.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "945462a4b81e43c4e3ba96bd7b49d834c6f61198356aa858733bc4acf3cbe62e"
++checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
+ 
+ [[package]]
+ name = "openat"
+@@ -1011,16 +1038,16 @@
+  "libc",
+  "nix 0.23.2",
+  "openat",
+- "rand",
++ "rand 0.8.5",
+ ]
+ 
+ [[package]]
+ name = "openssl"
+-version = "0.10.75"
++version = "0.10.76"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "08838db121398ad17ab8531ce9de97b244589089e290a384c900cb9ff7434328"
++checksum = "951c002c75e16ea2c65b8c7e4d3d51d5530d8dfa7d060b4776828c88cfb18ecf"
+ dependencies = [
+- "bitflags 2.8.0",
++ "bitflags 2.11.0",
+  "cfg-if",
+  "foreign-types",
+  "libc",
+@@ -1037,14 +1064,14 @@
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "openssl-sys"
+-version = "0.9.111"
++version = "0.9.112"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "82cab2d520aa75e3c58898289429321eb788c3106963d0dc886ec7a5f4adc321"
++checksum = "57d55af3b3e226502be1526dfdba67ab0e9c96fc293004e79576b2b9edb0dbdb"
+ dependencies = [
+  "cc",
+  "libc",
+@@ -1062,74 +1089,106 @@
+ ]
+ 
+ [[package]]
+-name = "overload"
+-version = "0.1.1"
++name = "owo-colors"
++version = "4.3.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
++checksum = "d211803b9b6b570f68772237e415a029d5a50c65d382910b879fb19d3271f94d"
+ 
+ [[package]]
+ name = "pin-project-lite"
+-version = "0.2.16"
++version = "0.2.17"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3b3cff922bd51709b605d9ead9aa71031d81447142d828eb4a6eba76fe619f9b"
++checksum = "a89322df9ebe1c1578d689c92318e070967d1042b512afbe49518723f4e6d5cd"
+ 
+ [[package]]
+ name = "pkg-config"
+-version = "0.3.31"
++version = "0.3.32"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "953ec861398dccce10c670dfeaf3ec4911ca479e9c02154b3a215178c5f566f2"
++checksum = "7edddbd0b52d732b21ad9a5fab5c704c14cd949e5e9a1ec5929a24fded1b904c"
+ 
+ [[package]]
+ name = "portable-atomic"
+-version = "1.11.0"
++version = "1.13.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "350e9b48cbc6b0e028b0473b114454c6316e57336ee184ceab6e53f72c178b3e"
++checksum = "c33a9471896f1c69cecef8d20cbe2f7accd12527ce60845ff44c153bb2a21b49"
+ 
+ [[package]]
+ name = "portable-atomic-util"
+-version = "0.2.4"
++version = "0.2.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d8a2f0d8d040d7848a709caf78912debcc3f33ee4b3cac47d73d1e1069e83507"
++checksum = "091397be61a01d4be58e7841595bd4bfedb15f1cd54977d79b8271e94ed799a3"
+ dependencies = [
+  "portable-atomic",
+ ]
+ 
+ [[package]]
+ name = "ppv-lite86"
+-version = "0.2.20"
++version = "0.2.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "77957b295656769bb8ad2b6a6b09d897d94f05c41b069aede1fcdaa675eaea04"
++checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
+ dependencies = [
+  "zerocopy",
+ ]
+ 
+ [[package]]
++name = "prettyplease"
++version = "0.2.37"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "479ca8adacdd7ce8f1fb39ce9ecccbfe93a3f1344b3d0d97f20bc0196208f62b"
++dependencies = [
++ "proc-macro2",
++ "syn 2.0.117",
++]
++
++[[package]]
+ name = "proc-macro2"
+-version = "1.0.93"
++version = "1.0.106"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "60946a68e5f9d28b0dc1c21bb8a97ee7d018a8b322fa57838ba31cc878e22d99"
++checksum = "8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934"
+ dependencies = [
+  "unicode-ident",
+ ]
+ 
+ [[package]]
+ name = "quote"
+-version = "1.0.38"
++version = "1.0.45"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0e4dccaaaf89514f546c693ddc140f729f958c247918a13380cccc6078391acc"
++checksum = "41f2619966050689382d2b44f664f4bc593e129785a36d6ee376ddf37259b924"
+ dependencies = [
+  "proc-macro2",
+ ]
+ 
+ [[package]]
++name = "r-efi"
++version = "5.3.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "69cdb34c158ceb288df11e18b4bd39de994f6657d83847bdffdbd7f346754b0f"
++
++[[package]]
++name = "r-efi"
++version = "6.0.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
++
++[[package]]
+ name = "rand"
+ version = "0.8.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "34af8d1a0e25924bc5b7c43c079c942339d8f0a8b57c39049bef581b46327404"
+ dependencies = [
+  "libc",
+- "rand_chacha",
+- "rand_core",
++ "rand_chacha 0.3.1",
++ "rand_core 0.6.4",
++]
++
++[[package]]
++name = "rand"
++version = "0.9.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6db2770f06117d490610c7488547d543617b21bfa07796d7a12f6f1bd53850d1"
++dependencies = [
++ "rand_chacha 0.9.0",
++ "rand_core 0.9.5",
+ ]
+ 
+ [[package]]
+@@ -1139,7 +1198,17 @@
+ checksum = "e6c10a63a0fa32252be49d21e7709d4d4baf8d231c2dbce1eaa8141b9b127d88"
+ dependencies = [
+  "ppv-lite86",
+- "rand_core",
++ "rand_core 0.6.4",
++]
++
++[[package]]
++name = "rand_chacha"
++version = "0.9.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d3022b5f1df60f26e1ffddd6c66e8aa15de382ae63b3a0c1bfc0e4d3e3f325cb"
++dependencies = [
++ "ppv-lite86",
++ "rand_core 0.9.5",
+ ]
+ 
+ [[package]]
+@@ -1148,52 +1217,46 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
+ dependencies = [
+- "getrandom 0.2.15",
++ "getrandom 0.2.17",
+ ]
+ 
+ [[package]]
+-name = "regex"
+-version = "1.12.2"
++name = "rand_core"
++version = "0.9.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "843bc0191f75f3e22651ae5f1e72939ab2f72a4bc30fa80a066bd66edefc24d4"
++checksum = "76afc826de14238e6e8c374ddcc1fa19e374fd8dd986b0d2af0d02377261d83c"
+ dependencies = [
+- "aho-corasick",
+- "memchr",
+- "regex-automata 0.4.12",
+- "regex-syntax 0.8.5",
++ "getrandom 0.3.4",
+ ]
+ 
+ [[package]]
+-name = "regex-automata"
+-version = "0.1.10"
++name = "regex"
++version = "1.12.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6c230d73fb8d8c1b9c0b3135c5142a8acee3a0558fb8db5cf1cb65f8d7862132"
++checksum = "e10754a14b9137dd7b1e3e5b0493cc9171fdd105e0ab477f51b72e7f3ac0e276"
+ dependencies = [
+- "regex-syntax 0.6.29",
++ "aho-corasick",
++ "memchr",
++ "regex-automata",
++ "regex-syntax",
+ ]
+ 
+ [[package]]
+ name = "regex-automata"
+-version = "0.4.12"
++version = "0.4.14"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "722166aa0d7438abbaa4d5cc2c649dac844e8c56d82fb3d33e9c34b5cd268fc6"
++checksum = "6e1dd4122fc1595e8162618945476892eefca7b88c52820e74af6262213cae8f"
+ dependencies = [
+  "aho-corasick",
+  "memchr",
+- "regex-syntax 0.8.5",
++ "regex-syntax",
+ ]
+ 
+ [[package]]
+ name = "regex-syntax"
+-version = "0.6.29"
++version = "0.8.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
+-
+-[[package]]
+-name = "regex-syntax"
+-version = "0.8.5"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
++checksum = "dc897dd8d9e8bd1ed8cdad82b5966c3e0ecae09fb1907d58efaa013543185d0a"
+ 
+ [[package]]
+ name = "rpm"
+@@ -1201,7 +1264,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "422ffe5b31ea4c7c76a361dc29b986e11fb6987313453088e1fd95f34ecc1ba6"
+ dependencies = [
+- "bitflags 2.8.0",
++ "bitflags 2.11.0",
+  "cpio",
+  "digest",
+  "enum-display-derive",
+@@ -1220,50 +1283,33 @@
+ ]
+ 
+ [[package]]
+-name = "rustc-demangle"
+-version = "0.1.24"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "719b953e2095829ee67db738b3bfa9fa368c94900df327b3f07fe6e794d2fe1f"
+-
+-[[package]]
+ name = "rustix"
+-version = "0.38.44"
++version = "1.1.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fdb5bc1ae2baa591800df16c9ca78619bf65c0488b41b96ccec5d11220d8c154"
++checksum = "b6fe4565b9518b83ef4f91bb47ce29620ca828bd32cb7e408f0062e9930ba190"
+ dependencies = [
+- "bitflags 2.8.0",
++ "bitflags 2.11.0",
+  "errno",
+- "itoa",
+  "libc",
+- "linux-raw-sys 0.4.15",
+- "once_cell",
+- "windows-sys 0.59.0",
++ "linux-raw-sys",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+-name = "rustix"
+-version = "1.1.2"
++name = "rustix-linux-procfs"
++version = "0.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cd15f8a2c5551a84d56efdc1cd049089e409ac19a3072d5037a17fd70719ff3e"
++checksum = "2fc84bf7e9aa16c4f2c758f27412dc9841341e16aa682d9c7ac308fe3ee12056"
+ dependencies = [
+- "bitflags 2.8.0",
+- "errno",
+- "libc",
+- "linux-raw-sys 0.11.0",
+- "windows-sys 0.59.0",
++ "once_cell",
++ "rustix",
+ ]
+ 
+ [[package]]
+ name = "rustversion"
+-version = "1.0.19"
++version = "1.0.22"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f7c45b9784283f1b2e7fb61b42047c2fd678ef0960d4f6f1eba131594cc369d4"
+-
+-[[package]]
+-name = "ryu"
+-version = "1.0.19"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6ea1a2d0a644769cc99faa24c3ad26b379b786fe7c36fd3c546254801650e6dd"
++checksum = "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d"
+ 
+ [[package]]
+ name = "same-file"
+@@ -1275,6 +1321,12 @@
+ ]
+ 
+ [[package]]
++name = "semver"
++version = "1.0.27"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d767eb0aabc880b29956c35734170f26ed551a859dbd361d140cdbeca61ab1e2"
++
++[[package]]
+ name = "serde"
+ version = "1.0.228"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1301,20 +1353,20 @@
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "serde_json"
+-version = "1.0.145"
++version = "1.0.149"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "402a6f66d8c709116cf22f558eab210f5a50187f702eb4d7e5ef38d9a7f1c79c"
++checksum = "83fc039473c5595ace860d8c4fafa220ff474b3fc6bfdb4293327f1a37e94d86"
+ dependencies = [
+  "itoa",
+  "memchr",
+- "ryu",
+  "serde",
+  "serde_core",
++ "zmij",
+ ]
+ 
+ [[package]]
+@@ -1330,9 +1382,9 @@
+ 
+ [[package]]
+ name = "sha2"
+-version = "0.10.8"
++version = "0.10.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "793db75ad2bcafc3ffa7c68b215fee268f537982cd901d132f89c6343f3a3dc8"
++checksum = "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283"
+ dependencies = [
+  "cfg-if",
+  "cpufeatures",
+@@ -1356,18 +1408,19 @@
+ 
+ [[package]]
+ name = "signal-hook-registry"
+-version = "1.4.6"
++version = "1.4.8"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b2a4719bff48cee6b39d12c020eeb490953ad2443b7055bd0b21fca26bd8c28b"
++checksum = "c4db69cba1110affc0e9f7bcd48bbf87b3f4fc7c61fc9155afd4c469eb3d6c1b"
+ dependencies = [
++ "errno",
+  "libc",
+ ]
+ 
+ [[package]]
+ name = "smallvec"
+-version = "1.13.2"
++version = "1.15.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
++checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
+ 
+ [[package]]
+ name = "strsim"
+@@ -1394,9 +1447,9 @@
+ 
+ [[package]]
+ name = "syn"
+-version = "2.0.98"
++version = "2.0.117"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "36147f1a48ae0ec2b5b3bc5b537d267457555a10dc06f3dbc8cb11ba3006d3b1"
++checksum = "e665b8803e7b1d2a727f4023456bbbbe74da67099c585258af0ad9c5013b9b99"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -1405,79 +1458,77 @@
+ 
+ [[package]]
+ name = "tempfile"
+-version = "3.23.0"
++version = "3.27.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2d31c77bdf42a745371d260a26ca7163f1e0924b64afa0b688e61b5a9fa02f16"
++checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
+ dependencies = [
+  "fastrand",
+- "getrandom 0.3.1",
++ "getrandom 0.4.2",
+  "once_cell",
+- "rustix 1.1.2",
+- "windows-sys 0.59.0",
++ "rustix",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+ name = "thiserror"
+-version = "2.0.12"
++version = "2.0.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "567b8a2dae586314f7be2a752ec7474332959c6460e02bde30d702a66d488708"
++checksum = "4288b5bcbc7920c07a1149a35cf9590a2aa808e0bc1eafaade0b80947865fbc4"
+ dependencies = [
+  "thiserror-impl",
+ ]
+ 
+ [[package]]
+ name = "thiserror-impl"
+-version = "2.0.12"
++version = "2.0.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
++checksum = "ebc4ee7f67670e9b64d05fa4253e753e016c6c95ff35b89b7941d6b856dec1d5"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "thread_local"
+-version = "1.1.8"
++version = "1.1.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8b9ef9bad013ada3808854ceac7b46812a6465ba368859a37e2100283d2d719c"
++checksum = "f60246a4944f24f6e018aa17cdeffb7818b76356965d03b07d6a9886e8962185"
+ dependencies = [
+  "cfg-if",
+- "once_cell",
+ ]
+ 
+ [[package]]
+ name = "tokio"
+-version = "1.43.0"
++version = "1.50.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3d61fa4ffa3de412bfea335c6ecff681de2b609ba3c77ef3e00e521813a9ed9e"
++checksum = "27ad5e34374e03cfffefc301becb44e9dc3c17584f414349ebe29ed26661822d"
+ dependencies = [
+- "backtrace",
+  "bytes",
+  "libc",
+  "mio",
+  "pin-project-lite",
+  "signal-hook-registry",
+  "tokio-macros",
+- "windows-sys 0.52.0",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+ name = "tokio-macros"
+-version = "2.5.0"
++version = "2.6.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6e06d43f1345a3bcd39f6a56dbb7dcab2ba47e68e8ac134855e7e2bdbaf8cab8"
++checksum = "5c55a2eff8b69ce66c84f85e1da1c233edc36ceb85a2058d11b0d6a3c7e7569c"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "tracing"
+-version = "0.1.41"
++version = "0.1.44"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "784e0ac535deb450455cbfa28a6f0df145ea1bb7ae51b821cf5e7927fdcfbdd0"
++checksum = "63e71662fa4b2a2c3a26f570f037eb95bb1f85397f3cd8076caed2f026a6d100"
+ dependencies = [
+  "pin-project-lite",
+  "tracing-attributes",
+@@ -1486,26 +1537,37 @@
+ 
+ [[package]]
+ name = "tracing-attributes"
+-version = "0.1.28"
++version = "0.1.31"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "395ae124c09f9e6918a2310af6038fba074bcf474ac352496d5910dd59a2226d"
++checksum = "7490cfa5ec963746568740651ac6781f701c9c5ea257c58e057f3ba8cf69e8da"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "tracing-core"
+-version = "0.1.33"
++version = "0.1.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e672c95779cf947c5311f83787af4fa8fffd12fb27e4993211a84bdfd9610f9c"
++checksum = "db97caf9d906fbde555dd62fa95ddba9eecfd14cb388e4f491a66d74cd5fb79a"
+ dependencies = [
+  "once_cell",
+  "valuable",
+ ]
+ 
+ [[package]]
++name = "tracing-journald"
++version = "0.3.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2d3a81ed245bfb62592b1e2bc153e77656d94ee6a0497683a65a12ccaf2438d0"
++dependencies = [
++ "libc",
++ "tracing-core",
++ "tracing-subscriber",
++]
++
++[[package]]
+ name = "tracing-log"
+ version = "0.2.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1518,14 +1580,14 @@
+ 
+ [[package]]
+ name = "tracing-subscriber"
+-version = "0.3.19"
++version = "0.3.23"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e8189decb5ac0fa7bc8b96b7cb9b2701d60d48805aca84a238004d665fcc4008"
++checksum = "cb7f578e5945fb242538965c2d0b04418d38ec25c79d160cd279bf0731c8d319"
+ dependencies = [
+  "matchers",
+  "nu-ansi-term",
+  "once_cell",
+- "regex",
++ "regex-automata",
+  "sharded-slab",
+  "smallvec",
+  "thread_local",
+@@ -1536,9 +1598,9 @@
+ 
+ [[package]]
+ name = "typenum"
+-version = "1.17.0"
++version = "1.19.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
++checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
+ 
+ [[package]]
+ name = "uapi-version"
+@@ -1548,15 +1610,15 @@
+ 
+ [[package]]
+ name = "unicode-ident"
+-version = "1.0.16"
++version = "1.0.24"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a210d160f08b701c8721ba1c726c11662f877ea6b7094007e1ca9a1041945034"
++checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+ 
+ [[package]]
+-name = "unty"
+-version = "0.0.4"
++name = "unicode-xid"
++version = "0.2.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6d49784317cd0d1ee7ec5c716dd598ec5b4483ea832a2dced265471cc0f690ae"
++checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
+ 
+ [[package]]
+ name = "utf8parse"
+@@ -1566,12 +1628,14 @@
+ 
+ [[package]]
+ name = "uuid"
+-version = "1.13.1"
++version = "1.22.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ced87ca4be083373936a67f8de945faa23b6b42384bd5b64434850802c6dccd0"
++checksum = "a68d3c8f01c0cfa54a75291d83601161799e4a89a39e0929f4b0354d88757a37"
+ dependencies = [
+- "getrandom 0.3.1",
+- "serde",
++ "getrandom 0.4.2",
++ "js-sys",
++ "serde_core",
++ "wasm-bindgen",
+ ]
+ 
+ [[package]]
+@@ -1593,12 +1657,6 @@
+ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+ 
+ [[package]]
+-name = "virtue"
+-version = "0.0.18"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "051eb1abcf10076295e815102942cc58f9d5e3b4560e46e53c21e8ff6f3af7b1"
+-
+-[[package]]
+ name = "walkdir"
+ version = "2.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1610,50 +1668,46 @@
+ 
+ [[package]]
+ name = "wasi"
+-version = "0.11.0+wasi-snapshot-preview1"
++version = "0.11.1+wasi-snapshot-preview1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
++checksum = "ccf3ec651a847eb01de73ccad15eb7d99f80485de043efb2f370cd654f4ea44b"
+ 
+ [[package]]
+-name = "wasi"
+-version = "0.13.3+wasi-0.2.2"
++name = "wasip2"
++version = "1.0.2+wasi-0.2.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "26816d2e1a4a36a2940b96c5296ce403917633dff8f3440e9b236ed6f6bacad2"
++checksum = "9517f9239f02c069db75e65f174b3da828fe5f5b945c4dd26bd25d89c03ebcf5"
+ dependencies = [
+- "wit-bindgen-rt",
++ "wit-bindgen",
+ ]
+ 
+ [[package]]
+-name = "wasm-bindgen"
+-version = "0.2.100"
++name = "wasip3"
++version = "0.4.0+wasi-0.3.0-rc-2026-01-06"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1edc8929d7499fc4e8f0be2262a241556cfc54a0bea223790e71446f2aab1ef5"
++checksum = "5428f8bf88ea5ddc08faddef2ac4a67e390b88186c703ce6dbd955e1c145aca5"
+ dependencies = [
+- "cfg-if",
+- "once_cell",
+- "rustversion",
+- "wasm-bindgen-macro",
++ "wit-bindgen",
+ ]
+ 
+ [[package]]
+-name = "wasm-bindgen-backend"
+-version = "0.2.100"
++name = "wasm-bindgen"
++version = "0.2.114"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2f0a0651a5c2bc21487bde11ee802ccaf4c51935d0d3d42a6101f98161700bc6"
++checksum = "6532f9a5c1ece3798cb1c2cfdba640b9b3ba884f5db45973a6f442510a87d38e"
+ dependencies = [
+- "bumpalo",
+- "log",
+- "proc-macro2",
+- "quote",
+- "syn 2.0.98",
++ "cfg-if",
++ "once_cell",
++ "rustversion",
++ "wasm-bindgen-macro",
+  "wasm-bindgen-shared",
+ ]
+ 
+ [[package]]
+ name = "wasm-bindgen-macro"
+-version = "0.2.100"
++version = "0.2.114"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7fe63fc6d09ed3792bd0897b314f53de8e16568c2b3f7982f468c0bf9bd0b407"
++checksum = "18a2d50fcf105fb33bb15f00e7a77b772945a2ee45dcf454961fd843e74c18e6"
+ dependencies = [
+  "quote",
+  "wasm-bindgen-macro-support",
+@@ -1661,27 +1715,61 @@
+ 
+ [[package]]
+ name = "wasm-bindgen-macro-support"
+-version = "0.2.100"
++version = "0.2.114"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8ae87ea40c9f689fc23f209965b6fb8a99ad69aeeb0231408be24920604395de"
++checksum = "03ce4caeaac547cdf713d280eda22a730824dd11e6b8c3ca9e42247b25c631e3"
+ dependencies = [
++ "bumpalo",
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
+- "wasm-bindgen-backend",
++ "syn 2.0.117",
+  "wasm-bindgen-shared",
+ ]
+ 
+ [[package]]
+ name = "wasm-bindgen-shared"
+-version = "0.2.100"
++version = "0.2.114"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1a05d73b933a847d6cccdda8f838a22ff101ad9bf93e33684f39c1f5f0eece3d"
++checksum = "75a326b8c223ee17883a4251907455a2431acc2791c98c26279376490c378c16"
+ dependencies = [
+  "unicode-ident",
+ ]
+ 
+ [[package]]
++name = "wasm-encoder"
++version = "0.244.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "990065f2fe63003fe337b932cfb5e3b80e0b4d0f5ff650e6985b1048f62c8319"
++dependencies = [
++ "leb128fmt",
++ "wasmparser",
++]
++
++[[package]]
++name = "wasm-metadata"
++version = "0.244.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "bb0e353e6a2fbdc176932bbaab493762eb1255a7900fe0fea1a2f96c296cc909"
++dependencies = [
++ "anyhow",
++ "indexmap",
++ "wasm-encoder",
++ "wasmparser",
++]
++
++[[package]]
++name = "wasmparser"
++version = "0.244.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "47b807c72e1bac69382b3a6fb3dbe8ea4c0ed87ff5629b8685ae6b9a611028fe"
++dependencies = [
++ "bitflags 2.11.0",
++ "hashbrown 0.15.5",
++ "indexmap",
++ "semver",
++]
++
++[[package]]
+ name = "widestring"
+ version = "1.2.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1705,11 +1793,11 @@
+ 
+ [[package]]
+ name = "winapi-util"
+-version = "0.1.9"
++version = "0.1.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
++checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
+ dependencies = [
+- "windows-sys 0.59.0",
++ "windows-sys 0.61.2",
+ ]
+ 
+ [[package]]
+@@ -1720,26 +1808,61 @@
+ 
+ [[package]]
+ name = "windows-core"
+-version = "0.52.0"
++version = "0.62.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b8e83a14d34d0623b51dce9581199302a221863196a1dde71a7663a4c2be9deb"
++dependencies = [
++ "windows-implement",
++ "windows-interface",
++ "windows-link",
++ "windows-result",
++ "windows-strings",
++]
++
++[[package]]
++name = "windows-implement"
++version = "0.60.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "053e2e040ab57b9dc951b72c264860db7eb3b0200ba345b4e4c3b14f67855ddf"
++dependencies = [
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
++]
++
++[[package]]
++name = "windows-interface"
++version = "0.59.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "33ab640c8d7e35bf8ba19b884ba838ceb4fba93a4e8c65a9059d08afcfc683d9"
++checksum = "3f316c4a2570ba26bbec722032c4099d8c8bc095efccdc15688708623367e358"
+ dependencies = [
+- "windows-targets",
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
+ ]
+ 
+ [[package]]
+ name = "windows-link"
+-version = "0.2.0"
++version = "0.2.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "45e46c0661abb7180e7b9c281db115305d49ca1709ab8242adf09666d2173c65"
++checksum = "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
+ 
+ [[package]]
+-name = "windows-sys"
+-version = "0.52.0"
++name = "windows-result"
++version = "0.4.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5"
++dependencies = [
++ "windows-link",
++]
++
++[[package]]
++name = "windows-strings"
++version = "0.5.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d"
++checksum = "7837d08f69c77cf6b07689544538e017c1bfcf57e34b4c0ff58e6c2cd3b37091"
+ dependencies = [
+- "windows-targets",
++ "windows-link",
+ ]
+ 
+ [[package]]
+@@ -1748,7 +1871,25 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1e38bc4d79ed67fd075bcc251a1c39b32a1776bbe92e5bef1f0bf1f8c531853b"
+ dependencies = [
+- "windows-targets",
++ "windows-targets 0.52.6",
++]
++
++[[package]]
++name = "windows-sys"
++version = "0.60.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f2f500e4d28234f72040990ec9d39e3a6b950f9f22d3dba18416c35882612bcb"
++dependencies = [
++ "windows-targets 0.53.5",
++]
++
++[[package]]
++name = "windows-sys"
++version = "0.61.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ae137229bcbd6cdf0f7b80a31df61766145077ddf49416a728b02cb3921ff3fc"
++dependencies = [
++ "windows-link",
+ ]
+ 
+ [[package]]
+@@ -1757,14 +1898,31 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "9b724f72796e036ab90c1021d4780d4d3d648aca59e491e6b98e725b84e99973"
+ dependencies = [
+- "windows_aarch64_gnullvm",
+- "windows_aarch64_msvc",
+- "windows_i686_gnu",
+- "windows_i686_gnullvm",
+- "windows_i686_msvc",
+- "windows_x86_64_gnu",
+- "windows_x86_64_gnullvm",
+- "windows_x86_64_msvc",
++ "windows_aarch64_gnullvm 0.52.6",
++ "windows_aarch64_msvc 0.52.6",
++ "windows_i686_gnu 0.52.6",
++ "windows_i686_gnullvm 0.52.6",
++ "windows_i686_msvc 0.52.6",
++ "windows_x86_64_gnu 0.52.6",
++ "windows_x86_64_gnullvm 0.52.6",
++ "windows_x86_64_msvc 0.52.6",
++]
++
++[[package]]
++name = "windows-targets"
++version = "0.53.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "4945f9f551b88e0d65f3db0bc25c33b8acea4d9e41163edf90dcd0b19f9069f3"
++dependencies = [
++ "windows-link",
++ "windows_aarch64_gnullvm 0.53.1",
++ "windows_aarch64_msvc 0.53.1",
++ "windows_i686_gnu 0.53.1",
++ "windows_i686_gnullvm 0.53.1",
++ "windows_i686_msvc 0.53.1",
++ "windows_x86_64_gnu 0.53.1",
++ "windows_x86_64_gnullvm 0.53.1",
++ "windows_x86_64_msvc 0.53.1",
+ ]
+ 
+ [[package]]
+@@ -1774,83 +1932,215 @@
+ checksum = "32a4622180e7a0ec044bb555404c800bc9fd9ec262ec147edd5989ccd0c02cd3"
+ 
+ [[package]]
++name = "windows_aarch64_gnullvm"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a9d8416fa8b42f5c947f8482c43e7d89e73a173cead56d044f6a56104a6d1b53"
++
++[[package]]
+ name = "windows_aarch64_msvc"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "09ec2a7bb152e2252b53fa7803150007879548bc709c039df7627cabbd05d469"
+ 
+ [[package]]
++name = "windows_aarch64_msvc"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b9d782e804c2f632e395708e99a94275910eb9100b2114651e04744e9b125006"
++
++[[package]]
+ name = "windows_i686_gnu"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8e9b5ad5ab802e97eb8e295ac6720e509ee4c243f69d781394014ebfe8bbfa0b"
+ 
+ [[package]]
++name = "windows_i686_gnu"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "960e6da069d81e09becb0ca57a65220ddff016ff2d6af6a223cf372a506593a3"
++
++[[package]]
+ name = "windows_i686_gnullvm"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0eee52d38c090b3caa76c563b86c3a4bd71ef1a819287c19d586d7334ae8ed66"
+ 
+ [[package]]
++name = "windows_i686_gnullvm"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "fa7359d10048f68ab8b09fa71c3daccfb0e9b559aed648a8f95469c27057180c"
++
++[[package]]
+ name = "windows_i686_msvc"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "240948bc05c5e7c6dabba28bf89d89ffce3e303022809e73deaefe4f6ec56c66"
+ 
+ [[package]]
++name = "windows_i686_msvc"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1e7ac75179f18232fe9c285163565a57ef8d3c89254a30685b57d83a38d326c2"
++
++[[package]]
+ name = "windows_x86_64_gnu"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "147a5c80aabfbf0c7d901cb5895d1de30ef2907eb21fbbab29ca94c5b08b1a78"
+ 
+ [[package]]
++name = "windows_x86_64_gnu"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "9c3842cdd74a865a8066ab39c8a7a473c0778a3f29370b5fd6b4b9aa7df4a499"
++
++[[package]]
+ name = "windows_x86_64_gnullvm"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "24d5b23dc417412679681396f2b49f3de8c1473deb516bd34410872eff51ed0d"
+ 
+ [[package]]
++name = "windows_x86_64_gnullvm"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0ffa179e2d07eee8ad8f57493436566c7cc30ac536a3379fdf008f47f6bb7ae1"
++
++[[package]]
+ name = "windows_x86_64_msvc"
+ version = "0.52.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
+ 
+ [[package]]
++name = "windows_x86_64_msvc"
++version = "0.53.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650"
++
++[[package]]
+ name = "winx"
+ version = "0.36.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3f3fd376f71958b862e7afb20cfe5a22830e1963462f3a17f49d82a6c1d1f42d"
+ dependencies = [
+- "bitflags 2.8.0",
++ "bitflags 2.11.0",
+  "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+-name = "wit-bindgen-rt"
+-version = "0.33.0"
++name = "wit-bindgen"
++version = "0.51.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d7249219f66ced02969388cf2bb044a09756a083d0fab1e566056b04d9fbcaa5"
++dependencies = [
++ "wit-bindgen-rust-macro",
++]
++
++[[package]]
++name = "wit-bindgen-core"
++version = "0.51.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ea61de684c3ea68cb082b7a88508a8b27fcc8b797d738bfc99a82facf1d752dc"
++dependencies = [
++ "anyhow",
++ "heck",
++ "wit-parser",
++]
++
++[[package]]
++name = "wit-bindgen-rust"
++version = "0.51.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b7c566e0f4b284dd6561c786d9cb0142da491f46a9fbed79ea69cdad5db17f21"
++dependencies = [
++ "anyhow",
++ "heck",
++ "indexmap",
++ "prettyplease",
++ "syn 2.0.117",
++ "wasm-metadata",
++ "wit-bindgen-core",
++ "wit-component",
++]
++
++[[package]]
++name = "wit-bindgen-rust-macro"
++version = "0.51.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0c0f9bfd77e6a48eccf51359e3ae77140a7f50b1e2ebfe62422d8afdaffab17a"
++dependencies = [
++ "anyhow",
++ "prettyplease",
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
++ "wit-bindgen-core",
++ "wit-bindgen-rust",
++]
++
++[[package]]
++name = "wit-component"
++version = "0.244.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "9d66ea20e9553b30172b5e831994e35fbde2d165325bec84fc43dbf6f4eb9cb2"
++dependencies = [
++ "anyhow",
++ "bitflags 2.11.0",
++ "indexmap",
++ "log",
++ "serde",
++ "serde_derive",
++ "serde_json",
++ "wasm-encoder",
++ "wasm-metadata",
++ "wasmparser",
++ "wit-parser",
++]
++
++[[package]]
++name = "wit-parser"
++version = "0.244.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3268f3d866458b787f390cf61f4bbb563b922d091359f9608842999eaee3943c"
++checksum = "ecc8ac4bc1dc3381b7f59c34f00b67e18f910c2c0f50015669dde7def656a736"
+ dependencies = [
+- "bitflags 2.8.0",
++ "anyhow",
++ "id-arena",
++ "indexmap",
++ "log",
++ "semver",
++ "serde",
++ "serde_derive",
++ "serde_json",
++ "unicode-xid",
++ "wasmparser",
+ ]
+ 
+ [[package]]
+ name = "zerocopy"
+-version = "0.7.35"
++version = "0.8.42"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1b9b4fd18abc82b8136838da5d50bae7bdea537c574d8dc1a34ed098d6c166f0"
++checksum = "f2578b716f8a7a858b7f02d5bd870c14bf4ddbbcf3a4c05414ba6503640505e3"
+ dependencies = [
+- "byteorder",
+  "zerocopy-derive",
+ ]
+ 
+ [[package]]
+ name = "zerocopy-derive"
+-version = "0.7.35"
++version = "0.8.42"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e"
++checksum = "7e6cc098ea4d3bd6246687de65af3f920c430e236bee1e3bf2e441463f08a02f"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 2.0.98",
++ "syn 2.0.117",
+ ]
++
++[[package]]
++name = "zmij"
++version = "1.0.21"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
+diff -ruN bootupd-0.2.32.orig/Cargo.toml bootupd-0.2.32/Cargo.toml
+--- bootupd-0.2.32.orig/Cargo.toml	1969-12-31 19:00:01.000000000 -0500
++++ bootupd-0.2.32/Cargo.toml	2026-04-15 23:26:57.361441408 -0400
+@@ -56,23 +56,20 @@
+ [dependencies.anyhow]
+ version = "1.0"
+ 
+-[dependencies.bincode]
+-version = "2.0.1"
+-
+ [dependencies.bootc-internal-blockdev]
+-version = "0.0.0"
++version = "0.2.0"
+ 
+ [dependencies.bootc-internal-utils]
+-version = "0.0.0"
++version = "0.1.0"
+ 
+ [dependencies.camino]
+-version = "1.2.1"
++version = "1.2.2"
+ 
+ [dependencies.cap-std-ext]
+-version = "4.0.6"
++version = "5.0.0"
+ 
+ [dependencies.chrono]
+-version = "0.4.42"
++version = "0.4.44"
+ features = ["serde"]
+ 
+ [dependencies.clap]
+diff -ruN bootupd-0.2.32.orig/src/bios.rs bootupd-0.2.32/src/bios.rs
+--- bootupd-0.2.32.orig/src/bios.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/bios.rs	2026-04-15 23:25:50.685785509 -0400
+@@ -1,13 +1,12 @@
+ use anyhow::{bail, Context, Result};
+ use camino::Utf8PathBuf;
+ use openat_ext::OpenatDirExt;
+-#[cfg(target_arch = "powerpc64")]
+-use std::borrow::Cow;
+ use std::io::prelude::*;
+ use std::path::Path;
+ use std::process::Command;
+ 
+-use crate::blockdev;
++use bootc_internal_blockdev::Device;
++
+ use crate::bootupd::RootContext;
+ use crate::component::*;
+ use crate::freezethaw::fsfreeze_thaw_cycle;
+@@ -19,27 +18,22 @@
+ pub(crate) const GRUB_BIN: &str = "usr/sbin/grub2-install";
+ 
+ #[cfg(target_arch = "powerpc64")]
+-fn target_device(device: &str) -> Result<Cow<str>> {
++fn target_device(device: &Device) -> Result<String> {
+     const PREPBOOT_GUID: &str = "9E1A2D38-C612-4316-AA26-8B49521E5A8B";
+     /// We make a best-effort to support MBR partitioning too.
+     const PREPBOOT_MBR_TYPE: &str = "41";
+ 
+-    // Here we use lsblk to see if the device has any partitions at all
+-    let dev = bootc_internal_blockdev::list_dev(device.into())?;
+-    if dev.children.is_none() {
+-        return Ok(device.into());
+-    };
+-    // If it does, directly call `sfdisk` and bypass lsblk because inside a container
+-    // we may not have all the cached udev state (that I think is in /run).
+-    let device = bootc_internal_blockdev::partitions_of(device.into())?;
++    if !device.has_children() {
++        return Ok(device.path());
++    }
++
+     let prepdev = device
+-        .partitions
+-        .iter()
+-        .find(|p| matches!(p.parttype.as_str(), PREPBOOT_GUID | PREPBOOT_MBR_TYPE))
++        .find_partition_of_type(PREPBOOT_GUID)
++        .or_else(|| device.find_partition_of_type(PREPBOOT_MBR_TYPE))
+         .ok_or_else(|| {
+             anyhow::anyhow!("Failed to find PReP partition with GUID {PREPBOOT_GUID}")
+         })?;
+-    Ok(prepdev.path().as_str().to_owned().into())
++    Ok(prepdev.path())
+ }
+ 
+ #[derive(Default)]
+@@ -63,7 +57,7 @@
+     }
+ 
+     // Run grub2-install
+-    fn run_grub_install(&self, dest_root: &str, device: &str) -> Result<()> {
++    fn run_grub_install(&self, dest_root: &str, device: &Device) -> Result<()> {
+         if !self.check_grub_modules()? {
+             bail!("Failed to find grub2-modules");
+         }
+@@ -81,7 +75,7 @@
+         cmd.args(["--target", "i386-pc"])
+             .args(["--boot-directory", boot_dir.to_str().unwrap()])
+             .args(["--modules", "mdraid1x part_gpt"])
+-            .arg(device);
++            .arg(&device.path());
+ 
+         #[cfg(target_arch = "powerpc64")]
+         {
+@@ -89,7 +83,7 @@
+             cmd.args(&["--target", "powerpc-ieee1275"])
+                 .args(&["--boot-directory", boot_dir.to_str().unwrap()])
+                 .arg("--no-nvram")
+-                .arg(&*device);
++                .arg(&device);
+         }
+ 
+         let cmdout = cmd.output()?;
+@@ -110,16 +104,20 @@
+         &self,
+         src_root: &str,
+         dest_root: &str,
+-        device: &str,
++        device: Option<&Device>,
+         _update_firmware: bool,
+     ) -> Result<InstalledContent> {
++        let device =
++            device.ok_or_else(|| anyhow::anyhow!("BIOS component requires a target device"))?;
+         let src_dir = openat::Dir::open(src_root)
+             .with_context(|| format!("opening source directory {src_root}"))?;
+         let Some(meta) = get_component_update(&src_dir, self)? else {
+             anyhow::bail!("No update metadata for component {} found", self.name());
+         };
+ 
+-        self.run_grub_install(dest_root, device)?;
++        self.run_grub_install(dest_root, device)
++            .with_context(|| format!("installing GRUB on {}", device.path()))?;
++
+         Ok(InstalledContent {
+             meta,
+             filetree: None,
+@@ -140,7 +138,7 @@
+         Ok(Some(meta))
+     }
+ 
+-    fn query_adopt(&self, devices: &Option<Vec<String>>) -> Result<Option<Adoptable>> {
++    fn query_adopt(&self, devices: &Option<Vec<Device>>) -> Result<Option<Adoptable>> {
+         #[cfg(target_arch = "x86_64")]
+         if crate::efi::is_efi_booted()? && devices.is_none() {
+             log::debug!("Skip BIOS adopt");
+@@ -214,14 +212,17 @@
+         update: &ContentMetadata,
+         with_static_config: bool,
+     ) -> Result<Option<InstalledContent>> {
+-        let bios_devices = blockdev::find_colocated_bios_boot(&rootcxt.devices)?;
++        let bios_devices = rootcxt.device.find_colocated_bios_boot()?;
+         let Some(meta) = self.query_adopt(&bios_devices)? else {
+             return Ok(None);
+         };
+ 
+-        for parent in rootcxt.devices.iter() {
++        // Install grub onto each parent (whole-disk) device. For BIOS boot on
++        // multi-disk setups (e.g. RAID), grub must be written to every backing
++        // disk's MBR/BIOS-boot partition so the system can boot from any one.
++        for parent in rootcxt.device.find_all_roots()? {
+             self.run_grub_install(rootcxt.path.as_str(), &parent)?;
+-            log::debug!("Installed grub modules on {parent}");
++            log::debug!("Installed grub modules on {}", parent.path());
+         }
+ 
+         if with_static_config {
+@@ -251,9 +252,9 @@
+             .query_update(&rootcxt.sysroot)?
+             .expect("update available");
+ 
+-        for parent in rootcxt.devices.iter() {
++        for parent in rootcxt.device.find_all_roots()? {
+             self.run_grub_install(rootcxt.path.as_str(), &parent)?;
+-            log::debug!("Installed grub modules on {parent}");
++            log::debug!("Installed grub modules on {}", parent.path());
+         }
+ 
+         let adopted_from = None;
+@@ -264,7 +265,7 @@
+         })
+     }
+ 
+-    fn validate(&self, _: &InstalledContent) -> Result<ValidationResult> {
++    fn validate(&self, _: &InstalledContent, _device: &Device) -> Result<ValidationResult> {
+         Ok(ValidationResult::Skip)
+     }
+ 
+diff -ruN bootupd-0.2.32.orig/src/blockdev.rs bootupd-0.2.32/src/blockdev.rs
+--- bootupd-0.2.32.orig/src/blockdev.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/blockdev.rs	1969-12-31 19:00:00.000000000 -0500
+@@ -1,144 +0,0 @@
+-use camino::{Utf8Path, Utf8PathBuf};
+-use std::path::Path;
+-
+-use anyhow::{Context, Result};
+-use bootc_internal_blockdev::PartitionTable;
+-use fn_error_context::context;
+-
+-#[context("get parent devices from mount point boot or sysroot")]
+-pub fn get_devices<P: AsRef<Path>>(target_root: P) -> Result<Vec<String>> {
+-    let target_root = target_root.as_ref();
+-    let mut source = None;
+-
+-    for path in ["boot", "sysroot"] {
+-        let target_path = target_root.join(path);
+-        if !target_path.exists() {
+-            continue;
+-        }
+-
+-        let target_dir = openat::Dir::open(&target_path)
+-            .with_context(|| format!("Opening {}", target_path.display()))?;
+-        if let Ok(fsinfo) = crate::filesystem::inspect_filesystem(&target_dir, ".") {
+-            source = Some(fsinfo.source);
+-            break;
+-        }
+-    }
+-
+-    let source = match source {
+-        Some(s) => s,
+-        None => anyhow::bail!("Failed to inspect filesystem from boot or sysroot"),
+-    };
+-
+-    // Find the parent devices of the source path
+-    let parent_devices = bootc_internal_blockdev::find_parent_devices(&source)
+-        .with_context(|| format!("While looking for backing devices of {}", source))?;
+-    log::debug!("Found parent devices: {parent_devices:?}");
+-    Ok(parent_devices)
+-}
+-
+-/// Find esp partition on the same device
+-/// using sfdisk to get partitiontable
+-pub fn get_esp_partition(device: &str) -> Result<Option<String>> {
+-    const ESP_TYPE_GUID: &str = "C12A7328-F81F-11D2-BA4B-00A0C93EC93B";
+-    let device_info: PartitionTable =
+-        bootc_internal_blockdev::partitions_of(Utf8Path::new(device))?;
+-    let esp = device_info
+-        .partitions
+-        .into_iter()
+-        .find(|p| p.parttype.as_str() == ESP_TYPE_GUID);
+-    if let Some(esp) = esp {
+-        return Ok(Some(esp.node));
+-    }
+-    Ok(None)
+-}
+-
+-/// Find all ESP partitions on the devices
+-pub fn find_colocated_esps(devices: &Vec<String>) -> Result<Option<Vec<String>>> {
+-    // look for all ESPs on those devices
+-    let mut esps = Vec::new();
+-    for device in devices {
+-        if let Some(esp) = get_esp_partition(&device)? {
+-            esps.push(esp)
+-        }
+-    }
+-    if esps.is_empty() {
+-        return Ok(None);
+-    }
+-    log::debug!("Found esp partitions: {esps:?}");
+-    Ok(Some(esps))
+-}
+-
+-/// Find bios_boot partition on the same device
+-#[cfg(any(target_arch = "x86_64", target_arch = "powerpc64"))]
+-pub fn get_bios_boot_partition(device: &str) -> Result<Option<String>> {
+-    const BIOS_BOOT_TYPE_GUID: &str = "21686148-6449-6E6F-744E-656564454649";
+-    let device_info = bootc_internal_blockdev::partitions_of(Utf8Path::new(device))?;
+-    let bios_boot = device_info
+-        .partitions
+-        .into_iter()
+-        .find(|p| p.parttype.as_str() == BIOS_BOOT_TYPE_GUID);
+-    if let Some(bios_boot) = bios_boot {
+-        return Ok(Some(bios_boot.node));
+-    }
+-    Ok(None)
+-}
+-
+-/// Find all bios_boot partitions on the devices
+-#[cfg(any(target_arch = "x86_64", target_arch = "powerpc64"))]
+-pub fn find_colocated_bios_boot(devices: &Vec<String>) -> Result<Option<Vec<String>>> {
+-    // look for all bios_boot parts on those devices
+-    let mut bios_boots = Vec::new();
+-    for device in devices {
+-        if let Some(bios) = get_bios_boot_partition(&device)? {
+-            bios_boots.push(bios)
+-        }
+-    }
+-    if bios_boots.is_empty() {
+-        return Ok(None);
+-    }
+-    log::debug!("Found bios_boot partitions: {bios_boots:?}");
+-    Ok(Some(bios_boots))
+-}
+-
+-// Check if the device is mpath
+-fn is_mpath(device: &str) -> Result<bool> {
+-    let dm_path = Utf8PathBuf::from_path_buf(std::fs::canonicalize(device)?)
+-        .map_err(|_| anyhow::anyhow!("Non-UTF8 path"))?;
+-    let dm_name = dm_path.file_name().unwrap_or("");
+-    let uuid_path = Utf8PathBuf::from(format!("/sys/class/block/{dm_name}/dm/uuid"));
+-
+-    if uuid_path.exists() {
+-        let uuid = std::fs::read_to_string(&uuid_path)
+-            .with_context(|| format!("Failed to read {uuid_path}"))?;
+-        if uuid.trim_start().starts_with("mpath-") {
+-            return Ok(true);
+-        }
+-    }
+-    Ok(false)
+-}
+-
+-/// Get esp partition number from device
+-pub fn get_esp_partition_number(device: &str) -> Result<String> {
+-    let esp_device =
+-        get_esp_partition(device)?.ok_or_else(|| anyhow::anyhow!("Failed to find ESP device"))?;
+-
+-    let devname = esp_device
+-        .rsplit_once('/')
+-        .ok_or_else(|| anyhow::anyhow!("Failed to parse {esp_device}"))?
+-        .1;
+-
+-    let partition_path = Utf8PathBuf::from(format!("/sys/class/block/{devname}/partition"));
+-    if partition_path.exists() {
+-        return std::fs::read_to_string(&partition_path)
+-            .with_context(|| format!("Failed to read {partition_path}"));
+-    }
+-
+-    // On multipath the partition attribute is not existing
+-    if is_mpath(device)? {
+-        if let Some(esp) = esp_device.strip_prefix(device) {
+-            let esp_num = esp.trim_start_matches(|c: char| !c.is_ascii_digit());
+-            return Ok(esp_num.to_string());
+-        }
+-    }
+-    anyhow::bail!("Not supported for {device}")
+-}
+diff -ruN bootupd-0.2.32.orig/src/bootupd.rs bootupd-0.2.32/src/bootupd.rs
+--- bootupd-0.2.32.orig/src/bootupd.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/bootupd.rs	2026-04-15 23:25:50.688206381 -0400
+@@ -25,6 +25,10 @@
+ use std::io::{BufRead, BufReader, BufWriter, Write};
+ use std::path::{Path, PathBuf};
+ 
++use bootc_internal_blockdev::Device;
++use cap_std::fs::Dir;
++use cap_std_ext::cap_std;
++
+ pub(crate) enum ConfigMode {
+     None,
+     Static,
+@@ -44,15 +48,12 @@
+ pub(crate) fn install(
+     source_root: &str,
+     dest_root: &str,
+-    device: Option<&str>,
++    devices: &[Device],
+     configs: ConfigMode,
+     update_firmware: bool,
+     target_components: Option<&[String]>,
+     auto_components: bool,
+ ) -> Result<()> {
+-    // TODO: Change this to an Option<&str>; though this probably balloons into having
+-    // DeviceComponent and FileBasedComponent
+-    let device = device.unwrap_or("");
+     let source_root_dir = openat::Dir::open(source_root).context("Opening source root")?;
+     SavedState::ensure_not_present(dest_root)
+         .context("failed to install, invalid re-install attempted")?;
+@@ -84,8 +85,8 @@
+     let mut state = SavedState::default();
+     let mut installed_efi_vendor = None;
+     for &component in target_components.iter() {
+-        // skip for BIOS if device is empty
+-        if component.name() == "BIOS" && device.is_empty() {
++        // skip for BIOS if no devices specified
++        if component.name() == "BIOS" && devices.is_empty() {
+             println!(
+                 "Skip installing component {} without target device",
+                 component.name()
+@@ -102,15 +103,70 @@
+             continue;
+         }
+ 
+-        let meta = component
+-            .install(&source_root, dest_root, device, update_firmware)
+-            .with_context(|| format!("installing component {}", component.name()))?;
+-        log::info!("Installed {} {}", component.name(), meta.meta.version);
+-        state.installed.insert(component.name().into(), meta);
+-        // Yes this is a hack...the Component thing just turns out to be too generic.
+-        if let Some(vendor) = component.get_efi_vendor(&Path::new(source_root))? {
+-            assert!(installed_efi_vendor.is_none());
+-            installed_efi_vendor = Some(vendor);
++        // Determine which devices to install to. For EFI, filter to only
++        // devices that have an ESP partition.
++        let devices_to_install: Vec<Option<&Device>> = if devices.is_empty() {
++            // No devices specified: install once with auto-detection (None).
++            vec![None]
++        } else if component.name() == "EFI" {
++            // For EFI, only install to devices that have an ESP partition.
++            let esp_devices: Vec<&Device> = devices
++                .iter()
++                .filter(|dev| match dev.find_partition_of_esp() {
++                    Ok(_) => true,
++                    Err(e) => {
++                        log::warn!("Skipping device {} for EFI: {:#}", dev.path(), e);
++                        false
++                    }
++                })
++                .collect();
++            if esp_devices.is_empty() {
++                // No devices had a detectable ESP partition. This can happen with
++                // loopback devices or other setups where partition scanning fails.
++                // Fall back to auto-detection — the EFI component will look for
++                // an already-mounted ESP at the destination.
++                log::info!(
++                    "No ESP partitions detected on specified devices; \
++                     falling back to mounted ESP detection"
++                );
++                vec![None]
++            } else {
++                esp_devices.into_iter().map(Some).collect()
++            }
++        } else {
++            devices.iter().map(|dev| Some(dev)).collect()
++        };
++
++        for device in &devices_to_install {
++            let device_desc = device.map_or("(auto)".to_string(), |d| d.path());
++            let meta = component
++                .install(source_root, dest_root, *device, update_firmware)
++                .with_context(|| {
++                    format!(
++                        "installing component {} to device {}",
++                        component.name(),
++                        device_desc,
++                    )
++                })?;
++            log::info!(
++                "Installed {} {} to {}",
++                component.name(),
++                meta.meta.version,
++                device_desc,
++            );
++            // State is tracked per-component, not per-device. The metadata
++            // (version, filetree, etc.) is identical across all devices, so we
++            // only need to record it once. Updates and validation discover all
++            // colocated devices at runtime (e.g. via find_colocated_esps()).
++            if !state.installed.contains_key(component.name()) {
++                state.installed.insert(component.name().into(), meta);
++            }
++            // Yes this is a hack...the Component thing just turns out to be too generic.
++            if installed_efi_vendor.is_none() {
++                if let Some(vendor) = component.get_efi_vendor(Path::new(source_root))? {
++                    installed_efi_vendor = Some(vendor);
++                }
++            }
+         }
+     }
+     let sysroot = &openat::Dir::open(dest_root)?;
+@@ -332,6 +388,22 @@
+     }
+ }
+ 
++/// Get the block device backing the current root by trying `/boot` first,
++/// then falling back to `/sysroot`. This avoids issues with virtual
++/// filesystems like composefs that are mounted on `/`.
++#[context("Finding block device from boot or sysroot")]
++fn list_dev_current_root() -> Result<Device> {
++    let auth = cap_std::ambient_authority();
++    for path in ["/boot", "/sysroot"] {
++        if let Ok(dir) = Dir::open_ambient_dir(path, auth) {
++            if let Ok(dev) = bootc_internal_blockdev::list_dev_by_dir(&dir) {
++                return Ok(dev);
++            }
++        }
++    }
++    anyhow::bail!("Failed to find block device from /boot or /sysroot")
++}
++
+ /// daemon implementation of component validate
+ pub(crate) fn validate(name: &str) -> Result<ValidationResult> {
+     let state = SavedState::load_from_disk("/")?.unwrap_or_default();
+@@ -339,7 +411,8 @@
+     let Some(inst) = state.installed.get(name) else {
+         anyhow::bail!("Component {} is not installed", name);
+     };
+-    component.validate(inst)
++    let device = list_dev_current_root()?;
++    component.validate(inst, &device)
+ }
+ 
+ pub(crate) fn status() -> Result<Status> {
+@@ -482,15 +555,20 @@
+ pub struct RootContext {
+     pub sysroot: openat::Dir,
+     pub path: Utf8PathBuf,
+-    pub devices: Vec<String>,
++
++    /// The block device backing the root filesystem.
++    ///
++    /// Used to determine the device to install to for components that need
++    /// it, and passed to component update/adoption logic for validation.
++    pub device: Device,
+ }
+ 
+ impl RootContext {
+-    fn new(sysroot: openat::Dir, path: &str, devices: Vec<String>) -> Self {
++    fn new(sysroot: openat::Dir, path: &str, device: Device) -> Self {
+         Self {
+             sysroot,
+             path: Utf8Path::new(path).into(),
+-            devices,
++            device,
+         }
+     }
+ }
+@@ -499,8 +577,8 @@
+ fn prep_before_update() -> Result<RootContext> {
+     let path = "/";
+     let sysroot = openat::Dir::open(path).context("Opening root dir")?;
+-    let devices = crate::blockdev::get_devices(path).context("get parent devices")?;
+-    Ok(RootContext::new(sysroot, path, devices))
++    let device = list_dev_current_root()?;
++    Ok(RootContext::new(sysroot, path, device))
+ }
+ 
+ pub(crate) fn client_run_update() -> Result<()> {
+diff -ruN bootupd-0.2.32.orig/src/cli/bootupd.rs bootupd-0.2.32/src/cli/bootupd.rs
+--- bootupd-0.2.32.orig/src/cli/bootupd.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/cli/bootupd.rs	2026-04-15 23:25:50.690988230 -0400
+@@ -1,5 +1,8 @@
+ use crate::bootupd::{self, ConfigMode};
+ use anyhow::{Context, Result};
++use camino::Utf8Path;
++use cap_std::fs::Dir;
++use cap_std_ext::cap_std;
+ use clap::Parser;
+ use log::LevelFilter;
+ 
+@@ -46,9 +49,15 @@
+     #[clap(value_parser)]
+     dest_root: String,
+ 
+-    /// Target device, used by bios bootloader installation
++    /// Target device(s) for bootloader installation. Can be specified multiple
++    /// times to install to multiple devices (e.g., for multi-disk RAID/LVM setups).
++    #[clap(long, action = clap::ArgAction::Append, conflicts_with = "filesystem")]
++    device: Vec<String>,
++
++    /// Filesystem path to inspect for backing devices. Bootupd will walk up the
++    /// device hierarchy to find physical disks and install to all ESPs found.
+     #[clap(long)]
+-    device: Option<String>,
++    filesystem: Option<String>,
+ 
+     /// Enable installation of the built-in static config files
+     #[clap(long)]
+@@ -110,10 +119,25 @@
+         } else {
+             ConfigMode::None
+         };
++
++        // Resolve devices: either discover backing devices from a filesystem path,
++        // or convert explicitly specified device paths to Device objects.
++        let devices = if let Some(ref fs_path) = opts.filesystem {
++            let dir = Dir::open_ambient_dir(fs_path, cap_std::ambient_authority())
++                .with_context(|| format!("Opening filesystem path {fs_path}"))?;
++            let device = bootc_internal_blockdev::list_dev_by_dir(&dir)?;
++            device.find_all_roots()?
++        } else {
++            opts.device
++                .iter()
++                .map(|d| bootc_internal_blockdev::list_dev(Utf8Path::new(d)))
++                .collect::<Result<Vec<_>>>()?
++        };
++
+         bootupd::install(
+             &opts.src_root,
+             &opts.dest_root,
+-            opts.device.as_deref(),
++            &devices,
+             configmode,
+             opts.update_firmware,
+             opts.components.as_deref(),
+diff -ruN bootupd-0.2.32.orig/src/component.rs bootupd-0.2.32/src/component.rs
+--- bootupd-0.2.32.orig/src/component.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/component.rs	2026-04-15 23:25:50.693676011 -0400
+@@ -10,6 +10,8 @@
+ use serde::{Deserialize, Serialize};
+ use std::path::{Path, PathBuf};
+ 
++use bootc_internal_blockdev::Device;
++
+ use crate::{bootupd::RootContext, model::*};
+ 
+ #[derive(Serialize, Deserialize, Debug)]
+@@ -20,7 +22,11 @@
+     Errors(Vec<String>),
+ }
+ 
+-/// A component along with a possible update
++/// A bootloader subsystem (EFI or BIOS) that can be installed, updated, and validated.
++///
++/// Components encapsulate platform-specific bootloader management. Each implementation
++/// handles installing bootloader files during image builds, applying updates at runtime,
++/// and optionally adopting existing installations not originally managed by bootupd.
+ pub(crate) trait Component {
+     /// Returns the name of the component; this will be used for serialization
+     /// and should remain stable.
+@@ -29,7 +35,7 @@
+     /// In an operating system whose initially booted disk image is not
+     /// using bootupd, detect whether it looks like the component exists
+     /// and "synthesize" content metadata from it.
+-    fn query_adopt(&self, devices: &Option<Vec<String>>) -> Result<Option<Adoptable>>;
++    fn query_adopt(&self, devices: &Option<Vec<Device>>) -> Result<Option<Adoptable>>;
+ 
+     // Backup the current grub config, and install static grub config from tree
+     fn migrate_static_grub_config(&self, sysroot_path: &str, destdir: &openat::Dir) -> Result<()>;
+@@ -53,7 +59,7 @@
+         &self,
+         src_root: &str,
+         dest_root: &str,
+-        device: &str,
++        device: Option<&Device>,
+         update_firmware: bool,
+     ) -> Result<InstalledContent>;
+ 
+@@ -75,7 +81,7 @@
+     ) -> Result<InstalledContent>;
+ 
+     /// Used on the client to validate an installed version.
+-    fn validate(&self, current: &InstalledContent) -> Result<ValidationResult>;
++    fn validate(&self, current: &InstalledContent, device: &Device) -> Result<ValidationResult>;
+ 
+     /// Locating efi vendor dir
+     fn get_efi_vendor(&self, sysroot: &Path) -> Result<Option<String>>;
+diff -ruN bootupd-0.2.32.orig/src/efi.rs bootupd-0.2.32/src/efi.rs
+--- bootupd-0.2.32.orig/src/efi.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/efi.rs	2026-04-15 23:25:50.696377191 -0400
+@@ -23,13 +23,15 @@
+ use walkdir::WalkDir;
+ use widestring::U16CString;
+ 
++use bootc_internal_blockdev::Device;
++
+ use crate::bootupd::RootContext;
+ use crate::freezethaw::fsfreeze_thaw_cycle;
+ use crate::model::*;
+ use crate::ostreeutil;
+ use crate::util;
+-use crate::{blockdev, filetree, grubconfigs};
+ use crate::{component::*, packagesystem::*};
++use crate::{filetree, grubconfigs};
+ 
+ /// Well-known paths to the ESP that may have been mounted external to us.
+ pub(crate) const ESP_MOUNTS: &[&str] = &["boot/efi", "efi", "boot"];
+@@ -58,6 +60,26 @@
+ /// The options of cp command for installation
+ const OPTIONS: &[&str] = &["-rp", "--reflink=auto"];
+ 
++/// Check if the given path is a mount point via statx(MOUNT_ROOT).
++fn is_mount_point(path: &Path) -> Result<bool> {
++    use rustix::fs::{AtFlags, StatxAttributes, StatxFlags};
++    // See https://github.com/coreos/cap-std-ext/blob/5493d689/src/dirext.rs#L514
++    // CWD is unused here because callers always pass absolute paths.
++    let r = rustix::fs::statx(
++        rustix::fs::CWD,
++        path,
++        AtFlags::NO_AUTOMOUNT | AtFlags::SYMLINK_NOFOLLOW,
++        StatxFlags::empty(),
++    )?;
++    if r.stx_attributes_mask.contains(StatxAttributes::MOUNT_ROOT) {
++        Ok(r.stx_attributes.contains(StatxAttributes::MOUNT_ROOT))
++    } else {
++        anyhow::bail!(
++            "could not determine if {path:?} is a mount point (kernel too old for MOUNT_ROOT)"
++        )
++    }
++}
++
+ /// Return `true` if the system is booted via EFI
+ pub(crate) fn is_efi_booted() -> Result<bool> {
+     Path::new("/sys/firmware/efi")
+@@ -83,6 +105,16 @@
+ 
+             let st = rustix::fs::statfs(&path)?;
+             if st.f_type == libc::MSDOS_SUPER_MAGIC {
++                // Verify this is actually a mount point, not just a subdirectory
++                // on a vfat filesystem. Compare device IDs: a mount point has a
++                // different device than its parent. Without this check, a vfat
++                // subdirectory (e.g. /boot/efi on a vfat /boot) could be
++                // misidentified as a mounted ESP.
++                if !is_mount_point(&path)? {
++                    // Same device as parent - this is a subdirectory, not a mount point
++                    log::debug!("Skipping {path:?}: vfat but not a mount point");
++                    continue;
++                }
+                 util::ensure_writable_mount(&path)?;
+                 found_mount = Some(path);
+                 break;
+@@ -108,10 +140,22 @@
+             if !mnt.exists() {
+                 continue;
+             }
++
++            // Check if the target is already a mounted ESP (e.g. the host
++            // already has the ESP mounted when running install-to-filesystem).
++            let st = rustix::fs::statfs(&mnt)?;
++            if st.f_type == libc::MSDOS_SUPER_MAGIC {
++                if is_mount_point(&mnt)? {
++                    log::debug!("ESP already mounted at {mnt:?}, reusing");
++                    mountpoint = Some(mnt);
++                    break;
++                }
++            }
++
+             std::process::Command::new("mount")
+                 .arg(&esp_device)
+                 .arg(&mnt)
+-                .run()
++                .run_inherited()
+                 .with_context(|| format!("Failed to mount {:?}", esp_device))?;
+             log::debug!("Mounted at {mnt:?}");
+             mountpoint = Some(mnt);
+@@ -139,7 +183,7 @@
+         if let Some(mount) = self.mountpoint.borrow_mut().take() {
+             Command::new("umount")
+                 .arg(&mount)
+-                .run()
++                .run_inherited()
+                 .with_context(|| format!("Failed to unmount {mount:?}"))?;
+             log::trace!("Unmounted");
+         }
+@@ -147,7 +191,12 @@
+     }
+ 
+     #[context("Updating EFI firmware variables")]
+-    fn update_firmware(&self, device: &str, espdir: &openat::Dir, vendordir: &str) -> Result<()> {
++    fn update_firmware(
++        &self,
++        device: &Device,
++        espdir: &openat::Dir,
++        vendordir: &str,
++    ) -> Result<()> {
+         if !is_efi_booted()? {
+             log::debug!("Not booted via EFI, skipping firmware update");
+             return Ok(());
+@@ -177,11 +226,15 @@
+         log::debug!("Get product name: '{product_name}'");
+         assert!(product_name.len() > 0);
+ 
+-        let esp_part_num = blockdev::get_esp_partition_number(device)?;
++        // Multi-device is handled by the caller: Efi::install() is called once
++        // per device in the loop at bootupd.rs install(), so each device's ESP
++        // gets its firmware updated individually.
++        let esp_part_num = device.get_esp_partition_number()?;
+ 
+         // clear all the boot entries that match the target name
+         clear_efi_target(&product_name)?;
+-        create_efi_boot_entry(device, esp_part_num.trim(), &loader, &product_name)
++        let device_path = device.path();
++        create_efi_boot_entry(&device_path, esp_part_num.trim(), &loader, &product_name)
+     }
+ }
+ 
+@@ -268,7 +321,7 @@
+         "EFI"
+     }
+ 
+-    fn query_adopt(&self, devices: &Option<Vec<String>>) -> Result<Option<Adoptable>> {
++    fn query_adopt(&self, devices: &Option<Vec<Device>>) -> Result<Option<Adoptable>> {
+         if devices.is_none() {
+             log::trace!("No ESP detected");
+             return Ok(None);
+@@ -317,7 +370,7 @@
+         updatemeta: &ContentMetadata,
+         with_static_config: bool,
+     ) -> Result<Option<InstalledContent>> {
+-        let esp_devices = blockdev::find_colocated_esps(&rootcxt.devices)?;
++        let esp_devices = rootcxt.device.find_colocated_esps()?;
+         let Some(meta) = self.query_adopt(&esp_devices)? else {
+             return Ok(None);
+         };
+@@ -339,7 +392,8 @@
+ 
+         let esp_devices = esp_devices.unwrap_or_default();
+         for esp in esp_devices {
+-            let destpath = &self.ensure_mounted_esp(rootcxt.path.as_ref(), Path::new(&esp))?;
++            let destpath =
++                &self.ensure_mounted_esp(rootcxt.path.as_ref(), Path::new(&esp.path()))?;
+ 
+             let efidir = openat::Dir::open(&destpath.join("EFI")).context("opening EFI dir")?;
+             validate_esp_fstype(&efidir)?;
+@@ -379,7 +433,7 @@
+         &self,
+         src_root: &str,
+         dest_root: &str,
+-        device: &str,
++        device: Option<&Device>,
+         update_firmware: bool,
+     ) -> Result<InstalledContent> {
+         let src_dir = openat::Dir::open(src_root)
+@@ -389,19 +443,24 @@
+         };
+         log::debug!("Found metadata {}", meta.version);
+ 
+-        // Let's attempt to use an already mounted ESP at the target
+-        // dest_root if one is already mounted there in a known ESP location.
+-        let destpath = if let Some(destdir) = self.get_mounted_esp(Path::new(dest_root))? {
++        // Determine the destination path for the ESP.
++        // If a device is provided, find and mount its ESP partition (unmounting
++        // any previously mounted ESP first to target the correct device).
++        // If no device is provided, fall back to an already-mounted ESP.
++        let destpath = if let Some(dev) = device {
++            // Unmount any previously mounted ESP to ensure we install to the
++            // correct device. This is important for multi-device installs where
++            // each device has its own ESP.
++            self.unmount()?;
++
++            let esp_device = dev
++                .find_partition_of_esp()
++                .with_context(|| format!("Failed to find ESP device on {}", dev.path()))?;
++            self.mount_esp_device(Path::new(dest_root), Path::new(&esp_device.path()))?
++        } else if let Some(destdir) = self.get_mounted_esp(Path::new(dest_root))? {
+             destdir
+         } else {
+-            // Using `blockdev` to find the partition instead of partlabel because
+-            // we know the target install toplevel device already.
+-            if device.is_empty() {
+-                anyhow::bail!("Device value not provided");
+-            }
+-            let esp_device = blockdev::get_esp_partition(device)?
+-                .ok_or_else(|| anyhow::anyhow!("Failed to find ESP device"))?;
+-            self.mount_esp_device(Path::new(dest_root), Path::new(&esp_device))?
++            anyhow::bail!("No device specified and no mounted ESP found");
+         };
+ 
+         let destd = &openat::Dir::open(&destpath)
+@@ -438,8 +497,12 @@
+         // Get filetree from efi path
+         let ft = crate::filetree::FileTree::new_from_dir(&src_dir.sub_dir(efi_path)?)?;
+         if update_firmware {
+-            if let Some(vendordir) = self.get_efi_vendor(src_path.join(efi_path).as_std_path())? {
+-                self.update_firmware(device, destd, &vendordir)?
++            if let Some(dev) = device {
++                if let Some(vendordir) =
++                    self.get_efi_vendor(src_path.join(efi_path).as_std_path())?
++                {
++                    self.update_firmware(dev, destd, &vendordir)?
++                }
+             }
+         }
+         Ok(InstalledContent {
+@@ -477,12 +540,13 @@
+         let updatef = filetree::FileTree::new_from_dir(&updated).context("reading update dir")?;
+         let diff = currentf.diff(&updatef)?;
+ 
+-        let Some(esp_devices) = blockdev::find_colocated_esps(&rootcxt.devices)? else {
++        let Some(esp_devices) = rootcxt.device.find_colocated_esps()? else {
+             anyhow::bail!("Failed to find all esp devices");
+         };
+ 
+         for esp in esp_devices {
+-            let destpath = &self.ensure_mounted_esp(rootcxt.path.as_ref(), Path::new(&esp))?;
++            let destpath =
++                &self.ensure_mounted_esp(rootcxt.path.as_ref(), Path::new(&esp.path()))?;
+             let destdir = openat::Dir::open(&destpath.join("EFI")).context("opening EFI dir")?;
+             validate_esp_fstype(&destdir)?;
+             log::trace!("applying diff: {}", &diff);
+@@ -558,9 +622,8 @@
+         get_component_update(sysroot, self)
+     }
+ 
+-    fn validate(&self, current: &InstalledContent) -> Result<ValidationResult> {
+-        let devices = crate::blockdev::get_devices("/").context("get parent devices")?;
+-        let esp_devices = blockdev::find_colocated_esps(&devices)?;
++    fn validate(&self, current: &InstalledContent, device: &Device) -> Result<ValidationResult> {
++        let esp_devices = device.find_colocated_esps()?;
+         if !is_efi_booted()? && esp_devices.is_none() {
+             return Ok(ValidationResult::Skip);
+         }
+@@ -572,7 +635,7 @@
+         let mut errs = Vec::new();
+         let esp_devices = esp_devices.unwrap_or_default();
+         for esp in esp_devices.iter() {
+-            let destpath = &self.ensure_mounted_esp(Path::new("/"), Path::new(&esp))?;
++            let destpath = &self.ensure_mounted_esp(Path::new("/"), Path::new(&esp.path()))?;
+ 
+             let efidir = openat::Dir::open(&destpath.join("EFI"))
+                 .with_context(|| format!("opening EFI dir {}", destpath.display()))?;
+@@ -687,7 +750,7 @@
+             let mut cmd = Command::new(EFIBOOTMGR);
+             cmd.args(["-b", entry.id.as_str(), "-B"]);
+             println!("Executing: {cmd:?}");
+-            cmd.run_with_cmd_context()?;
++            cmd.run_inherited_with_cmd_context()?;
+         }
+     }
+ 
+@@ -715,7 +778,7 @@
+         target,
+     ]);
+     println!("Executing: {cmd:?}");
+-    cmd.run_with_cmd_context()
++    cmd.run_inherited_with_cmd_context()
+ }
+ 
+ #[context("Find target file recursively")]
+diff -ruN bootupd-0.2.32.orig/src/filetree.rs bootupd-0.2.32/src/filetree.rs
+--- bootupd-0.2.32.orig/src/filetree.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/filetree.rs	2026-04-15 23:25:50.699301440 -0400
+@@ -386,7 +386,7 @@
+             .arg(src)
+             .arg(dst)
+             .pre_exec(move || rustix::process::fchdir(rootfd).map_err(Into::into))
+-            .run()?
++            .run_inherited()?
+     };
+     log::debug!("Copy {src} to {dst}");
+     Ok(())
+diff -ruN bootupd-0.2.32.orig/src/grubconfigs.rs bootupd-0.2.32/src/grubconfigs.rs
+--- bootupd-0.2.32.orig/src/grubconfigs.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/grubconfigs.rs	2026-04-15 23:25:50.702128737 -0400
+@@ -153,7 +153,7 @@
+     std::process::Command::new(editenv)
+         .args([GRUBENV, "create"])
+         .current_dir(format!("/proc/self/fd/{}", grubdir.as_raw_fd()))
+-        .run_with_cmd_context()
++        .run_inherited_with_cmd_context()
+ }
+ 
+ #[cfg(test)]
+diff -ruN bootupd-0.2.32.orig/src/main.rs bootupd-0.2.32/src/main.rs
+--- bootupd-0.2.32.orig/src/main.rs	2006-07-23 21:21:28.000000000 -0400
++++ bootupd-0.2.32/src/main.rs	2026-04-15 23:25:50.705361927 -0400
+@@ -19,7 +19,6 @@
+ mod backend;
+ #[cfg(any(target_arch = "x86_64", target_arch = "powerpc64"))]
+ mod bios;
+-mod blockdev;
+ mod bootupd;
+ mod cli;
+ mod component;
