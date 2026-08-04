@@ -3,7 +3,7 @@
 %global crate bootupd
 
 Name:           rust-%{crate}
-Version:        0.2.31
+Version:        0.2.35
 Release:        1%{?dist}
 Summary:        Bootloader updater
 
@@ -72,6 +72,9 @@ License:        Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND BSD-3-Clause
 %{__make} install-systemd-unit DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 
 %changelog
+* Wed Jul 01 2026 Pragyan Poudyal <ppoudyal@redhat.com> - 0.2.35-1
+  Resolves: #RHEL-110494
+
 * Thu Aug 21 2025 HuijingHei <hhei@redhat.com> - 0.2.29-1
   Resolves: #RHEL-110494
 
